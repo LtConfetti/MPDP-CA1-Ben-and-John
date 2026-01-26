@@ -16,7 +16,7 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_camera.getSize().x, 3000.f))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
 	, m_spawn_position2((m_camera.getSize().x / 2.f)-40, m_world_bounds.size.y - m_camera.getSize().y / 2.f)
-	, m_scroll_speed(-100.f)
+	, m_scroll_speed(0.f)
 	, m_player_aircraft(nullptr)
 	, m_player_aircraft2(nullptr)
 {
@@ -46,8 +46,6 @@ void World::Update(sf::Time dt)
 
 	HandleCollisions();
 	m_scene_graph.RemoveWrecks();
-
-	SpawnEnemies();
 
 	m_scene_graph.Update(dt, m_command_queue);
 	AdaptPlayerPosition();
@@ -144,20 +142,27 @@ void World::BuildScene()
 	right_escort->setPosition(sf::Vector2f(80.f, 50.f));
 	m_player_aircraft->AttachChild(std::move(right_escort));*/
 
-	AddEnemies();
 }
 
 void World::AdaptPlayerVelocity()
 {
 	sf::Vector2f velocity = m_player_aircraft->GetVelocity();
+	sf::Vector2f velocity2 = m_player_aircraft2->GetVelocity();
+
 
 	//If they are moving diagonally divide by sqrt 2
 	if (velocity.x != 0.f && velocity.y != 0.f)
 	{
 		m_player_aircraft->SetVelocity(velocity / std::sqrt(2.f));
+
+	}
+	if (velocity2.x != 0.f && velocity2.y != 0.f)
+	{
+		m_player_aircraft->SetVelocity(velocity2 / std::sqrt(2.f));
+
 	}
 	//Add scrolling velocity
-	m_player_aircraft->Accelerate(0.f, m_scroll_speed);
+
 }
 
 void World::AdaptPlayerPosition()
@@ -175,7 +180,7 @@ void World::AdaptPlayerPosition()
 
 }
 
-void World::SpawnEnemies()
+/*void World::SpawnEnemies()
 {
 	//Spawn an enemy when it is relevent i.e in BattlefieldBounds
 	while (!m_enemy_spawn_points.empty() && m_enemy_spawn_points.back().m_y > GetBattleFieldBounds().position.y)
@@ -211,7 +216,7 @@ void World::AddEnemy(AircraftType type, float relx, float rely)
 	SpawnPoint spawn(type, m_spawn_position.x + relx, m_spawn_position.y - rely);
 	m_enemy_spawn_points.emplace_back(spawn);
 }
-
+*/
 sf::FloatRect World::GetViewBounds() const
 {
 	return sf::FloatRect(m_camera.getCenter() - m_camera.getSize() / 2.f, m_camera.getSize());;
