@@ -2,6 +2,7 @@
 #include <memory>
 #include "resource_identifiers.hpp"
 #include "player.hpp"
+#include "player2.hpp"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "stateid.hpp"
 
@@ -15,12 +16,13 @@ public:
 
 	struct Context
 	{
-		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player);
+		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player, Player2& player2);
 		//TODO unique_ptr rather than raw pointers here?
 		sf::RenderWindow* window;
 		TextureHolder* textures;
 		FontHolder* fonts;
 		Player* player;
+		Player* player2;
 	};
 
 public:
