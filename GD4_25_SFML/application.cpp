@@ -7,8 +7,12 @@
 #include "pause_state.hpp"
 #include "settings_state.hpp"
 #include "game_over_state.hpp"
+#include "state.hpp"
 
-Application::Application() : m_window(sf::VideoMode({ 1024, 768 }), "States", sf::Style::Close), m_stack(State::Context(m_window, m_textures, m_fonts, m_player))
+Application::Application() : m_window(sf::VideoMode({ 1024, 768 }), "States", sf::Style::Close),
+m_player(new Player()),
+m_player2(new Player2()),
+m_stack(State::Context(m_window, m_textures, m_fonts, *m_player, *m_player2))
 {
 	m_window.setKeyRepeatEnabled(false);
 	m_fonts.Load(FontID::kMain, "Media/Fonts/Sansation.ttf");
@@ -20,6 +24,11 @@ Application::Application() : m_window(sf::VideoMode({ 1024, 768 }), "States", sf
 
 	RegisterStates();
 	m_stack.PushState(StateID::kTitle);
+}
+
+Application::~Application() {
+	delete m_player;   // Free memory allocated for Player
+	delete m_player2;  // Free memory allocated for Player2
 }
 
 void Application::Run()

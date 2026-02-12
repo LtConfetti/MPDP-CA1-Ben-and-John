@@ -19,7 +19,7 @@ Player::Player()
     m_key_binding[sf::Keyboard::Scancode::W] = Action::kMoveUp;
     m_key_binding[sf::Keyboard::Scancode::S] = Action::kMoveDown;
     m_key_binding[sf::Keyboard::Scancode::Space] = Action::kBulletFire;
-    m_key_binding[sf::Keyboard::Scancode::M] = Action::kMissileFire;
+    m_key_binding[sf::Keyboard::Scancode::C] = Action::kMissileFire;
 
     InitialiseActions();
 
