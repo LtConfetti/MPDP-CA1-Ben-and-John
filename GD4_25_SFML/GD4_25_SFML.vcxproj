@@ -147,6 +147,7 @@
     <ClCompile Include="pause_state.cpp" />
     <ClCompile Include="pickup.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="pointbox.cpp" />
     <ClCompile Include="projectile.cpp" />
     <ClCompile Include="scene_node.cpp" />
     <ClCompile Include="settings_state.cpp" />
@@ -183,6 +184,8 @@
     <ClInclude Include="pickup.hpp" />
     <ClInclude Include="pickup_type.hpp" />
     <ClInclude Include="player.hpp" />
+    <ClInclude Include="pointbox.hpp" />
+    <ClInclude Include="pointbox_type.hpp" />
     <ClInclude Include="projectile.hpp" />
     <ClInclude Include="projectile_type.hpp" />
     <ClInclude Include="receiver_categories.hpp" />

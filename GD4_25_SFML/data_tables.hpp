@@ -35,11 +35,16 @@ struct PickupData
 	TextureID m_texture;
 };
 
+struct PointBoxData
+{
+	int m_point_value;
+	float m_speed;
+	TextureID m_texture;
+	std::vector<Direction> m_directions;
+};
+
 std::vector<AircraftData> InitializeAircraftData();
 std::vector<ProjectileData> InitializeProjectileData();
 std::vector<PickupData> InitializePickupData();
-
-
-
-
+std::vector<PointBoxData> InitializePointBoxData();
 

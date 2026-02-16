@@ -4,6 +4,7 @@
 #include "pickup_type.hpp"
 #include "aircraft.hpp"
 #include "constants.hpp"
+#include "pointbox_type.hpp"
 
 std::vector<AircraftData> InitializeAircraftData()
 {
@@ -61,5 +62,33 @@ std::vector<PickupData> InitializePickupData()
 
 	data[static_cast<int>(PickupType::kFireRate)].m_texture = TextureID::kFireRate;
 	data[static_cast<int>(PickupType::kFireRate)].m_action = std::bind(&Aircraft::IncreaseFireRate, std::placeholders::_1);
+	return data;
+}
+
+std::vector<PointBoxData> InitializePointBoxData()
+{
+	std::vector<PointBoxData> data(static_cast<int>(PointBoxType::kPointBoxCount));
+
+	data[static_cast<int>(PointBoxType::kPlusOne)].m_point_value = 1;
+	data[static_cast<int>(PointBoxType::kPlusOne)].m_speed = 100.f;
+	data[static_cast<int>(PointBoxType::kPlusOne)].m_texture = TextureID::kPointBoxPlusOne;
+	data[static_cast<int>(PointBoxType::kPlusOne)].m_directions.emplace_back(Direction(+15.f, 50.f));
+	data[static_cast<int>(PointBoxType::kPlusOne)].m_directions.emplace_back(Direction(-15.f, 100.f));
+	data[static_cast<int>(PointBoxType::kPlusOne)].m_directions.emplace_back(Direction(+15.f, 50.f));
+
+	data[static_cast<int>(PointBoxType::kPlusTwo)].m_point_value = 2;
+	data[static_cast<int>(PointBoxType::kPlusTwo)].m_speed = 100.f;
+	data[static_cast<int>(PointBoxType::kPlusTwo)].m_texture = TextureID::kPointBoxPlusTwo;
+	data[static_cast<int>(PointBoxType::kPlusTwo)].m_directions.emplace_back(Direction(+15.f, 50.f));
+	data[static_cast<int>(PointBoxType::kPlusTwo)].m_directions.emplace_back(Direction(-15.f, 100.f));
+	data[static_cast<int>(PointBoxType::kPlusTwo)].m_directions.emplace_back(Direction(+15.f, 50.f));
+
+	data[static_cast<int>(PointBoxType::kPlusThree)].m_point_value = 3;
+	data[static_cast<int>(PointBoxType::kPlusThree)].m_speed = 100.f;
+	data[static_cast<int>(PointBoxType::kPlusThree)].m_texture = TextureID::kPointBoxPlusThree;
+	data[static_cast<int>(PointBoxType::kPlusThree)].m_directions.emplace_back(Direction(+15.f, 50.f));
+	data[static_cast<int>(PointBoxType::kPlusThree)].m_directions.emplace_back(Direction(-15.f, 100.f));
+	data[static_cast<int>(PointBoxType::kPlusThree)].m_directions.emplace_back(Direction(+15.f, 50.f));
+
 	return data;
 }
