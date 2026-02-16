@@ -45,6 +45,9 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 	, m_missile_ammo(2)
 	, m_is_marked_for_removal(false)
 	, m_spawned_pickup(false)
+
+	, m_score_display(nullptr)
+	, m_current_score(0)
 {
 	Utility::CentreOrigin(m_sprite);
 
@@ -76,6 +79,12 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 		std::unique_ptr<TextNode> missile_display(new TextNode(fonts, *missile_ammo));
 		m_missile_display = missile_display.get();
 		AttachChild(std::move(missile_display));
+
+		//Collecting and adding Score
+		std::string* score = new std::string("");
+		std::unique_ptr<TextNode> score_display(new TextNode(fonts, *score));
+		m_score_display = score_display.get();
+		AttachChild(std::move(score_display));
 	}
 	UpdateTexts();
 }
@@ -110,6 +119,12 @@ void Aircraft::CollectMissile(unsigned int count)
 	m_missile_ammo += count;
 }
 
+void Aircraft::AddScore(int points)
+{
+	m_current_score += points;
+	UpdateTexts();
+}
+
 void Aircraft::UpdateTexts()
 {
 	m_health_display->SetString(std::to_string(GetHitPoints()) + "HP");
@@ -127,6 +142,12 @@ void Aircraft::UpdateTexts()
 		{
 			m_missile_display->SetString("M: " + std::to_string(m_missile_ammo));
 		}
+	}
+
+	if (m_score_display)
+	{
+		m_score_display->setPosition(sf::Vector2f(0.f, 90.f));
+		m_score_display->SetString("Score: " + std::to_string(m_current_score));
 	}
 }
 

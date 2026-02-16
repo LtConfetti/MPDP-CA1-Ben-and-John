@@ -329,6 +329,7 @@ void World::HandleCollisions()
 
 			int points = pointbox.GetPointValue();
 			m_player_score += points;
+			player.AddScore(points);
 
 			std::cout << "current player score: " << m_player_score << std::endl;
 
