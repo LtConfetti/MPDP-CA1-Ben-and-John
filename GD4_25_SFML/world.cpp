@@ -388,4 +388,8 @@ void World::SpawnPointBoxes() {
 	std::cout << "X Spawn: " << spawn_x << " Y Spawn: " << spawn_y << std::endl;
 }
 
+bool World::HasPlayerReachedPoints() const{
+	return m_player_aircraft->GetScore() >= 30; 
+}
+
 

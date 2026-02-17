@@ -25,6 +25,10 @@ bool GameState::Update(sf::Time dt)
 		m_player.SetMissionStatus(MissionStatus::kMissionSuccess);
 		RequestStackPush(StateID::kGameOver);
 	}
+	else if (m_world.HasPlayerReachedPoints()) {
+		m_player.SetMissionStatus(MissionStatus::kMissionSuccess);
+		RequestStackPush(StateID::kGameOver);
+	}
 
 	CommandQueue& commands = m_world.GetCommandQueue();
 	m_player.HandleRealTimeInput(commands);

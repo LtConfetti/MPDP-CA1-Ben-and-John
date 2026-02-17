@@ -19,6 +19,7 @@ public:
 
 	bool HasAlivePlayer() const;
 	bool HasPlayerReachedEnd() const;
+	bool HasPlayerReachedPoints() const; //New Win Condition for Points
 
 private:
 	void LoadTextures();

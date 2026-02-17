@@ -16,6 +16,7 @@ public:
 	void IncreaseFireSpread();
 	void CollectMissile(unsigned int count);
 	void AddScore(int points);
+	int GetScore();
 
 	void UpdateTexts();
 	void UpdateMovementPattern(sf::Time dt);

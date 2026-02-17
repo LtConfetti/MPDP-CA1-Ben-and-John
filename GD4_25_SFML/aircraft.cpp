@@ -313,3 +313,7 @@ void Aircraft::CheckPickupDrop(CommandQueue& commands)
 		commands.Push(m_drop_pickup_command);
 	}
 }
+
+int Aircraft::GetScore() {
+	return m_current_score;
+}
