@@ -15,7 +15,7 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 	, m_scene_layers()
 	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_camera.getSize().x, 3000.f))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
-	, m_spawn_position2((m_camera.getSize().x / 2.f)-40, m_world_bounds.size.y - m_camera.getSize().y / 2.f)
+	, m_spawn_position2((m_camera.getSize().x / 2.f)-80, m_world_bounds.size.y - m_camera.getSize().y / 2.f)
 	, m_scroll_speed(0.f)
 	, m_player_aircraft(nullptr)
 	, m_player_aircraft2(nullptr)
@@ -79,6 +79,7 @@ bool World::HasPlayerReachedEnd() const
 void World::LoadTextures()
 {
 	m_textures.Load(TextureID::kEagle, "Media/Textures/Eagle.png");
+	m_textures.Load(TextureID::kEagle2, "Media/Textures/Eagle1.png");
 	m_textures.Load(TextureID::kRaptor, "Media/Textures/Raptor.png");
 	m_textures.Load(TextureID::kLandscape, "Media/Textures/Desert.png");
 	m_textures.Load(TextureID::kBullet, "Media/Textures/Bullet.png");
@@ -125,13 +126,20 @@ void World::BuildScene()
 	m_player_aircraft = leader.get();
 	m_player_aircraft->setPosition(m_spawn_position);
 	m_player_aircraft->SetVelocity(40.f, m_scroll_speed);
+	std::cout << "Player 1 spawn position: " << m_spawn_position.x << ", " << m_spawn_position.y << std::endl;
+
 	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(leader));
 
-	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftType::kEagle, m_textures, m_fonts));
+
+	
+	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftType::kEagle2, m_textures, m_fonts));
 	m_player_aircraft2 = player2.get();
 	m_player_aircraft2->setPosition(m_spawn_position2);
 	m_player_aircraft2->SetVelocity(40.f, m_scroll_speed);
+
+	std::cout << "Player 2 spawn position: " << m_spawn_position2.x << ", " << m_spawn_position2.y << std::endl;
 	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(player2));
+
 	//left_escort->setPosition(sf::Vector2f(- 80.f, 50.f));
 	//m_player_aircraft2 = left_escort.get();
 	////m_player_aircraft->AttachChild(std::move(left_escort));
@@ -158,7 +166,7 @@ void World::AdaptPlayerVelocity()
 	}
 	if (velocity2.x != 0.f && velocity2.y != 0.f)
 	{
-		m_player_aircraft->SetVelocity(velocity2 / std::sqrt(2.f));
+		m_player_aircraft2->SetVelocity(velocity2 / std::sqrt(2.f));
 
 	}
 	//Add scrolling velocity
@@ -177,6 +185,13 @@ void World::AdaptPlayerPosition()
 	position.y = std::min(position.y, view_bounds.position.y + view_bounds.size.y - border_distance);
 	position.y = std::max(position.y, view_bounds.position.y + border_distance);
 	m_player_aircraft->setPosition(position);
+
+	sf::Vector2f position2 = m_player_aircraft2->getPosition();
+	position2.x = std::min(position2.x, view_bounds.size.x - border_distance);
+	position2.x = std::max(position2.x, border_distance);
+	position2.y = std::min(position2.y, view_bounds.position.y + view_bounds.size.y - border_distance);
+	position2.y = std::max(position2.y, view_bounds.position.y + border_distance);
+	m_player_aircraft2->setPosition(position2);
 
 }
 
@@ -298,8 +313,10 @@ bool MatchesCategories(SceneNode::Pair& colliders, ReceiverCategories type1, Rec
 
 void World::HandleCollisions()
 {
+	//std::cout << "Player 2 Active: " << !m_player_aircraft2->IsMarkedForRemoval() << std::endl;
 	std::set<SceneNode::Pair> collision_pairs;
 	m_scene_graph.CheckSceneCollision(m_scene_graph, collision_pairs);
+
 
 	for (SceneNode::Pair pair : collision_pairs)
 	{
@@ -308,6 +325,7 @@ void World::HandleCollisions()
 			auto& player = static_cast<Aircraft&>(*pair.first);
 			auto& enemy = static_cast<Aircraft&>(*pair.second);
 			//Collision response
+			std::cout << "Collision: Player vs Enemy" << std::endl;
 			player.Damage(enemy.GetHitPoints());
 			enemy.Destroy();
 		}
@@ -315,6 +333,8 @@ void World::HandleCollisions()
 		{
 			auto& player = static_cast<Aircraft&>(*pair.first);
 			auto& pickup = static_cast<Pickup&>(*pair.second);
+			std::cout << "Collision: Player vs Pickup" << std::endl;
+
 			//Collision response
 			pickup.Apply(player);
 			pickup.Destroy();
@@ -324,6 +344,8 @@ void World::HandleCollisions()
 			auto& aircraft = static_cast<Aircraft&>(*pair.first);
 			auto& projectile = static_cast<Projectile&>(*pair.second);
 			//Collision response
+			std::cout << "Collision: Aircraft vs Projectile" << std::endl;
+
 			aircraft.Damage(projectile.GetDamage());
 			projectile.Destroy();
 		}

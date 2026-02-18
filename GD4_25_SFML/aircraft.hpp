@@ -34,6 +34,7 @@ private:
 
 	void CheckProjectileLaunch(sf::Time dt, CommandQueue& commands);
 	bool IsAllied() const;
+	bool IsPlayer2() const;
 	void CreatePickup(SceneNode& node, const TextureHolder& textures);
 	void CheckPickupDrop(CommandQueue& commands);
 
@@ -53,6 +54,7 @@ private:
 
 	unsigned int m_fire_rate;
 	unsigned int m_spread_level;
+	unsigned int m_spread_level2;
 	unsigned int m_missile_ammo;
 
 	bool m_is_firing;

@@ -22,6 +22,9 @@ TextureID ToTextureID(AircraftType type)
 	case AircraftType::kEagle:
 		return TextureID::kEagle;
 		break;
+	case AircraftType::kEagle2:
+		return TextureID::kEagle2;
+		break;
 	case AircraftType::kRaptor:
 		return TextureID::kRaptor;
 		break;
@@ -39,6 +42,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 	, m_directions_index(0)
 	, m_fire_rate(1)
 	, m_spread_level(1)
+	, m_spread_level2(1)
 	, m_is_firing(false)
 	, m_is_launching_missile(false)
 	, m_fire_countdown(sf::Time::Zero)
@@ -77,6 +81,13 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 		m_missile_display = missile_display.get();
 		AttachChild(std::move(missile_display));
 	}
+	else if (Aircraft::GetCategory() == static_cast<int>(ReceiverCategories::Player2Aircraft))
+	{
+		std::string* missile_ammo = new std::string("");
+		std::unique_ptr<TextNode> missile_display(new TextNode(fonts, *missile_ammo));
+		m_missile_display = missile_display.get();
+		AttachChild(std::move(missile_display));
+	}
 	UpdateTexts();
 }
 
@@ -85,6 +96,10 @@ unsigned int Aircraft::GetCategory() const
 	if (IsAllied())
 	{
 		return static_cast<unsigned int>(ReceiverCategories::kPlayerAircraft);
+	}
+	else if (IsPlayer2())
+	{
+		return static_cast<unsigned int>(ReceiverCategories::Player2Aircraft);
 	}
 	return static_cast<unsigned int>(ReceiverCategories::kEnemyAircraft);
 }
@@ -194,6 +209,23 @@ void Aircraft::CreateBullet(SceneNode& node, const TextureHolder& textures) cons
 		CreateProjectile(node, type, 0.5f, 0.5f, textures);
 		break;
 	}
+
+	/*ProjectileType type2 = IsPlayer2() ? ProjectileType::kAlliedBullet : ProjectileType::kEnemyBullet;
+	switch (m_spread_level2)
+	{
+	case 1:
+		CreateProjectile(node, type2, 0.0f, 0.5f, textures);
+		break;
+	case 2:
+		CreateProjectile(node, type2, -0.5f, 0.5f, textures);
+		CreateProjectile(node, type2, 0.5f, 0.5f, textures);
+		break;
+	case 3:
+		CreateProjectile(node, type2, 0.0f, 0.5f, textures);
+		CreateProjectile(node, type2, -0.5f, 0.5f, textures);
+		CreateProjectile(node, type2, 0.5f, 0.5f, textures);
+		break;
+	}*/
 }
 
 void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_offset, float y_offset, const TextureHolder& textures) const
@@ -206,6 +238,16 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	projectile->setPosition(GetWorldPosition() + offset * sign);
 	projectile->SetVelocity(velocity * sign);
 	node.AttachChild(std::move(projectile));
+
+	//std::unique_ptr<Projectile> projectile2(new Projectile(type, textures));
+	//sf::Vector2f offset2(x_offset * m_sprite.getGlobalBounds().size.x, y_offset * m_sprite.getGlobalBounds().size.y);
+	//sf::Vector2f velocity2(0, projectile2->GetMaxSpeed());
+
+	//float sign2 = IsPlayer2() ? -1.f : 1.f;
+	//projectile2->setPosition(GetWorldPosition() + offset2 * sign2);
+	//projectile2->SetVelocity(velocity2 * sign2);
+	//node.AttachChild(std::move(projectile2));
+
 
 }
 
@@ -242,7 +284,7 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 
 void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
-	if (!IsAllied())
+	if (!IsAllied()|| !IsPlayer2())
 	{
 		Fire();
 	}
@@ -272,6 +314,11 @@ bool Aircraft::IsAllied() const
 	return m_type == AircraftType::kEagle;
 }
 
+bool Aircraft::IsPlayer2() const
+{
+	return m_type == AircraftType::kEagle2;
+}
+
 void Aircraft::CreatePickup(SceneNode& node, const TextureHolder& textures)
 {
 	if (!m_spawned_pickup)
@@ -287,7 +334,7 @@ void Aircraft::CreatePickup(SceneNode& node, const TextureHolder& textures)
 
 void Aircraft::CheckPickupDrop(CommandQueue& commands)
 {
-	if (!IsAllied() && Utility::RandomInt(kPickupDropChance) == 0 && !m_spawned_pickup)
+	if ((!IsAllied() || !IsPlayer2()) && Utility::RandomInt(kPickupDropChance) == 0 && !m_spawned_pickup)
 	{
 		commands.Push(m_drop_pickup_command);
 	}

@@ -25,7 +25,7 @@ Player2::Player2()
 
     for (auto& pair : m_action_binding)
     {
-        pair.second.category = static_cast<unsigned int>(ReceiverCategories::kPlayerAircraft);
+        pair.second.category = static_cast<unsigned int>(ReceiverCategories::Player2Aircraft);
     }
 }
 
