@@ -18,7 +18,7 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 	, m_scene_layers()
 	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_camera.getSize().x, 3000.f))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
-	, m_scroll_speed(-100.f)
+	//, m_scroll_speed(-100.f)
 	, m_player_aircraft(nullptr)
 	, m_player_aircraft2(nullptr)
 	, m_pointbox_spawn_timer(sf::Time::Zero) //Timer
@@ -32,7 +32,7 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 void World::Update(sf::Time dt)
 {
 	//Scroll the world
-	m_camera.move(sf::Vector2f(0, m_scroll_speed * dt.asSeconds()));
+	//m_camera.move(sf::Vector2f(0, m_scroll_speed * dt.asSeconds()));
 
 	m_player_aircraft->SetVelocity(0.f, 0.f);
 

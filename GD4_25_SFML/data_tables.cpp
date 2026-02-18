@@ -70,25 +70,25 @@ std::vector<PointBoxData> InitializePointBoxData()
 	std::vector<PointBoxData> data(static_cast<int>(PointBoxType::kPointBoxCount));
 
 	data[static_cast<int>(PointBoxType::kPlusOne)].m_point_value = 1;
-	data[static_cast<int>(PointBoxType::kPlusOne)].m_speed = 100.f;
+	data[static_cast<int>(PointBoxType::kPlusOne)].m_speed = 100.f; //Fastest box cause its lower points
 	data[static_cast<int>(PointBoxType::kPlusOne)].m_texture = TextureID::kPointBoxPlusOne;
-	data[static_cast<int>(PointBoxType::kPlusOne)].m_directions.emplace_back(Direction(+15.f, 50.f));
-	data[static_cast<int>(PointBoxType::kPlusOne)].m_directions.emplace_back(Direction(-15.f, 100.f));
-	data[static_cast<int>(PointBoxType::kPlusOne)].m_directions.emplace_back(Direction(+15.f, 50.f));
+	data[static_cast<int>(PointBoxType::kPlusOne)].m_directions.emplace_back(Direction(+10.f, 50.f));
+	data[static_cast<int>(PointBoxType::kPlusOne)].m_directions.emplace_back(Direction(-10.f, 100.f));
+	data[static_cast<int>(PointBoxType::kPlusOne)].m_directions.emplace_back(Direction(+10.f, 50.f));
 
 	data[static_cast<int>(PointBoxType::kPlusTwo)].m_point_value = 2;
-	data[static_cast<int>(PointBoxType::kPlusTwo)].m_speed = 100.f;
+	data[static_cast<int>(PointBoxType::kPlusTwo)].m_speed = 85.f; //Slightly slower
 	data[static_cast<int>(PointBoxType::kPlusTwo)].m_texture = TextureID::kPointBoxPlusTwo;
-	data[static_cast<int>(PointBoxType::kPlusTwo)].m_directions.emplace_back(Direction(+15.f, 50.f));
-	data[static_cast<int>(PointBoxType::kPlusTwo)].m_directions.emplace_back(Direction(-15.f, 100.f));
-	data[static_cast<int>(PointBoxType::kPlusTwo)].m_directions.emplace_back(Direction(+15.f, 50.f));
+	data[static_cast<int>(PointBoxType::kPlusTwo)].m_directions.emplace_back(Direction(+20.f, 50.f));
+	data[static_cast<int>(PointBoxType::kPlusTwo)].m_directions.emplace_back(Direction(+20.f, 100.f));
+	data[static_cast<int>(PointBoxType::kPlusTwo)].m_directions.emplace_back(Direction(+20.f, 50.f));
 
 	data[static_cast<int>(PointBoxType::kPlusThree)].m_point_value = 3;
-	data[static_cast<int>(PointBoxType::kPlusThree)].m_speed = 100.f;
+	data[static_cast<int>(PointBoxType::kPlusThree)].m_speed = 75.f; //Keep the slowest
 	data[static_cast<int>(PointBoxType::kPlusThree)].m_texture = TextureID::kPointBoxPlusThree;
-	data[static_cast<int>(PointBoxType::kPlusThree)].m_directions.emplace_back(Direction(+15.f, 50.f));
-	data[static_cast<int>(PointBoxType::kPlusThree)].m_directions.emplace_back(Direction(-15.f, 100.f));
-	data[static_cast<int>(PointBoxType::kPlusThree)].m_directions.emplace_back(Direction(+15.f, 50.f));
+	data[static_cast<int>(PointBoxType::kPlusThree)].m_directions.emplace_back(Direction(+30.f, 50.f));
+	data[static_cast<int>(PointBoxType::kPlusThree)].m_directions.emplace_back(Direction(-30.f, 100.f));
+	data[static_cast<int>(PointBoxType::kPlusThree)].m_directions.emplace_back(Direction(+30.f, 50.f));
 
 	return data;
 }
