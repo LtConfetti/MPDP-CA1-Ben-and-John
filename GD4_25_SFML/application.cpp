@@ -22,6 +22,9 @@ m_stack(State::Context(m_window, m_textures, m_fonts, *m_player, *m_player2))
 	m_textures.Load(TextureID::kButtonNormal, "Media/Textures/ButtonNormal.png");
 	m_textures.Load(TextureID::kButtonSelected, "Media/Textures/ButtonSelected.png");
 	m_textures.Load(TextureID::kButtonActivated, "Media/Textures/ButtonPressed.png");
+	m_textures.Load(TextureID::kPointBoxPlusOne, "Media/Textures/box_plus_one.png");
+	m_textures.Load(TextureID::kPointBoxPlusTwo, "Media/Textures/box_plus_two.png");
+	m_textures.Load(TextureID::kPointBoxPlusThree, "Media/Textures/box_plus_three.png");
 
 	RegisterStates();
 	m_stack.PushState(StateID::kTitle);

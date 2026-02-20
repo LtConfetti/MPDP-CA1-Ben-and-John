@@ -5,6 +5,8 @@
 #include "scene_layers.hpp"
 #include "aircraft.hpp"
 #include "command_queue.hpp"
+#include "pointbox.hpp"
+#include "pointbox_type.hpp"
 
 class World
 {
@@ -17,6 +19,7 @@ public:
 
 	bool HasAlivePlayer() const;
 	bool HasPlayerReachedEnd() const;
+	bool HasPlayerReachedPoints() const; //New Win Condition for Points
 
 private:
 	void LoadTextures();
@@ -36,6 +39,9 @@ private:
 	void HandleCollisions();
 
 	void DestroyEntitiesOutsideView();
+
+	void SpawnPointBoxes();
+	void UpdatePointBoxSpawning(sf::Time dt);
 
 private:
 	struct SpawnPoint
@@ -62,6 +68,9 @@ private:
 	float m_scroll_speed;
 	Aircraft* m_player_aircraft;
 	Aircraft* m_player_aircraft2;
+
+	sf::Time m_pointbox_spawn_timer; //Timer to track when to spawn the boxes
+	int m_player_score; //Score for players
 
 	CommandQueue m_command_queue;
 

@@ -5,6 +5,9 @@
 #include <SFML/System/Angle.hpp>
 #include "Projectile.hpp"
 #include "pickup.hpp"
+#include "pointbox.hpp"
+#include "pointbox_type.hpp"
+#include "utility.hpp"
 
 World::World(sf::RenderWindow& window, FontHolder& font)
 	: m_window(window)
@@ -15,10 +18,11 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 	, m_scene_layers()
 	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_camera.getSize().x, 3000.f))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
-	, m_spawn_position2((m_camera.getSize().x / 2.f)-80, m_world_bounds.size.y - m_camera.getSize().y / 2.f)
-	, m_scroll_speed(0.f)
+	//, m_scroll_speed(-100.f)
 	, m_player_aircraft(nullptr)
 	, m_player_aircraft2(nullptr)
+	, m_pointbox_spawn_timer(sf::Time::Zero) //Timer
+	, m_player_score(0) //Player Score Count
 {
 	LoadTextures();
 	BuildScene();
@@ -28,7 +32,7 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 void World::Update(sf::Time dt)
 {
 	//Scroll the world
-	m_camera.move(sf::Vector2f(0, m_scroll_speed * dt.asSeconds()));
+	//m_camera.move(sf::Vector2f(0, m_scroll_speed * dt.asSeconds()));
 
 	m_player_aircraft->SetVelocity(0.f, 0.f);
 	m_player_aircraft2->SetVelocity(0.f, 0.f);
@@ -49,6 +53,8 @@ void World::Update(sf::Time dt)
 
 	m_scene_graph.Update(dt, m_command_queue);
 	AdaptPlayerPosition();
+
+	UpdatePointBoxSpawning(dt);
 }
 
 
@@ -90,6 +96,10 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kFireSpread, "Media/Textures/FireSpread.png");
 	m_textures.Load(TextureID::kFireRate, "Media/Textures/FireRate.png");
 	m_textures.Load(TextureID::kFinishLine, "Media/Textures/FinishLine.png");
+
+	m_textures.Load(TextureID::kPointBoxPlusOne, "Media/Textures/box_plus_one.png");
+	m_textures.Load(TextureID::kPointBoxPlusTwo, "Media/Textures/box_plus_two.png");
+	m_textures.Load(TextureID::kPointBoxPlusThree, "Media/Textures/box_plus_three.png");
 
 }
 
@@ -348,13 +358,25 @@ void World::HandleCollisions()
 			aircraft.Damage(projectile.GetDamage());
 			projectile.Destroy();
 		}
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kPointBox)) {
+			auto& player = static_cast<Aircraft&>(*pair.first);
+			auto& pointbox = static_cast<PointBox&>(*pair.second);
+
+			int points = pointbox.GetPointValue();
+			m_player_score += points;
+			player.AddScore(points);
+
+			std::cout << "current player score: " << m_player_score << std::endl;
+
+			pointbox.Destroy();
+		}
 	}
 }
 
 void World::DestroyEntitiesOutsideView()
 {
 	Command command;
-	command.category = static_cast<int>(ReceiverCategories::kEnemyAircraft) | static_cast<int>(ReceiverCategories::kProjectile);
+	command.category = static_cast<int>(ReceiverCategories::kEnemyAircraft) | static_cast<int>(ReceiverCategories::kProjectile)| static_cast<int>(ReceiverCategories::kPointBox);
 	command.action = DerivedAction<Entity>([this](Entity& e, sf::Time dt)
 	{
 		//Does the object intersect with the battlefield
@@ -365,6 +387,44 @@ void World::DestroyEntitiesOutsideView()
 	});
 	m_command_queue.Push(command);
 
+}
+
+void World::UpdatePointBoxSpawning(sf::Time dt) { //Timer for boxes spawning
+	const sf::Time kSpawenInterval = sf::seconds(1.0f); //Spawn every X Seconds (3 ATM)
+	m_pointbox_spawn_timer += dt;
+
+	if (m_pointbox_spawn_timer >= kSpawenInterval)
+	{
+		SpawnPointBoxes();
+		m_pointbox_spawn_timer = sf::Time::Zero; //Timer reset after summon
+	}
+}
+
+void World::SpawnPointBoxes() {
+	int random_type = Utility::RandomInt(static_cast<int>(PointBoxType::kPointBoxCount));
+	PointBoxType type = static_cast<PointBoxType>(random_type);
+
+	std::unique_ptr<PointBox> box(new PointBox(type, m_textures, m_fonts));
+
+	sf::FloatRect view_bounds = GetViewBounds();
+
+	float min_x = view_bounds.position.x + 50.f;
+	float max_x = view_bounds.position.x + view_bounds.size.x - 50.f;
+	int range = static_cast<int>(max_x - min_x);
+
+	float spawn_x = min_x + static_cast<float>(Utility::RandomInt(range + 1));
+
+	float spawn_y = view_bounds.position.y - 50.f;
+
+	box->setPosition(sf::Vector2f(spawn_x, spawn_y));
+
+	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(box));
+
+	std::cout << "X Spawn: " << spawn_x << " Y Spawn: " << spawn_y << std::endl;
+}
+
+bool World::HasPlayerReachedPoints() const{
+	return m_player_aircraft->GetScore() >= 30; 
 }
 
 

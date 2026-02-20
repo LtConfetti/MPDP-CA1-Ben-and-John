@@ -15,6 +15,8 @@ public:
 	void IncreaseFireRate();
 	void IncreaseFireSpread();
 	void CollectMissile(unsigned int count);
+	void AddScore(int points);
+	int GetScore();
 
 	void UpdateTexts();
 	void UpdateMovementPattern(sf::Time dt);
@@ -44,6 +46,9 @@ private:
 
 	TextNode* m_health_display;
 	TextNode* m_missile_display;
+	TextNode* m_score_display; //For Player UI to show score
+
+	int m_current_score; //current score saved
 
 	float m_distance_travelled;
 	int m_directions_index;

@@ -17,4 +17,7 @@ enum class TextureID
 	kFireRate,
 	kFinishLine,
 	kNumTextures,
+	kPointBoxPlusOne,
+	kPointBoxPlusTwo,
+	kPointBoxPlusThree,
 };
