@@ -18,11 +18,14 @@ World::World(sf::RenderWindow& window, FontHolder& font)
 	, m_scene_layers()
 	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_camera.getSize().x, 3000.f))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
+	, m_spawn_position2(m_camera.getSize().x / 2.f + 100.f, m_world_bounds.size.y - m_camera.getSize().y / 2.f)
 	//, m_scroll_speed(-100.f)
 	, m_player_aircraft(nullptr)
 	, m_player_aircraft2(nullptr)
 	, m_pointbox_spawn_timer(sf::Time::Zero) //Timer
-	, m_player_score(0) //Player Score Count
+	, m_player1_score(0) //Player 1 Score Count
+	, m_player2_score(0) //Player 2 score
+
 {
 	LoadTextures();
 	BuildScene();
@@ -348,6 +351,16 @@ void World::HandleCollisions()
 			pickup.Apply(player);
 			pickup.Destroy();
 		}
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kPickup))
+		{
+			auto& player = static_cast<Aircraft&>(*pair.first);
+			auto& pickup = static_cast<Pickup&>(*pair.second);
+			std::cout << "Collision: Player2 vs Pickup" << std::endl;
+
+			//Collision response
+			pickup.Apply(player);
+			pickup.Destroy();
+		}
 		else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kEnemyProjectile) || MatchesCategories(pair,ReceiverCategories::kEnemyAircraft, ReceiverCategories::kAlliedProjectile))
 		{
 			auto& aircraft = static_cast<Aircraft&>(*pair.first);
@@ -363,10 +376,22 @@ void World::HandleCollisions()
 			auto& pointbox = static_cast<PointBox&>(*pair.second);
 
 			int points = pointbox.GetPointValue();
-			m_player_score += points;
+			m_player1_score += points;
 			player.AddScore(points);
 
-			std::cout << "current player score: " << m_player_score << std::endl;
+			std::cout << "current player 1 score: " << m_player1_score << std::endl;
+
+			pointbox.Destroy();
+		}
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kPointBox)) {
+			auto& player = static_cast<Aircraft&>(*pair.first);
+			auto& pointbox = static_cast<PointBox&>(*pair.second);
+
+			int points = pointbox.GetPointValue();
+			m_player2_score += points;
+			player.AddScore(points);
+
+			std::cout << "current player 2 score: " << m_player2_score << std::endl;
 
 			pointbox.Destroy();
 		}
@@ -423,8 +448,29 @@ void World::SpawnPointBoxes() {
 	std::cout << "X Spawn: " << spawn_x << " Y Spawn: " << spawn_y << std::endl;
 }
 
+int::World ::GetPlayer1Score() const {
+	return m_player1_score;
+}
+
+int World::GetPlayer2Score() const {
+	return m_player2_score;
+}
+
+int World::GetWinningPlayer() const {
+		if (m_player1_score > m_player2_score) {
+		return 1; // Player 1 wins
+	}
+	else if (m_player2_score > m_player1_score) {
+		return 2; // Player 2 wins
+	}
+	else {
+		return 0; // Any other state or smthn IG
+	}
+
+}
+
 bool World::HasPlayerReachedPoints() const{
-	return m_player_aircraft->GetScore() >= 30; 
+	return m_player_aircraft->GetScore() >= 30 || m_player_aircraft2->GetScore() >= 30;
 }
 
 

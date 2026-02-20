@@ -1,5 +1,6 @@
 #include "game_state.hpp"
 #include "mission_status.hpp"
+#include <iostream>
 
 GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.fonts), m_player(*context.player), m_player2(*context.player2)
 {
@@ -26,9 +27,18 @@ bool GameState::Update(sf::Time dt)
 		RequestStackPush(StateID::kGameOver);
 	}
 	else if (m_world.HasPlayerReachedPoints()) {
-		m_player.SetMissionStatus(MissionStatus::kMissionSuccess);
-		RequestStackPush(StateID::kGameOver);
-	}
+		int winner = m_world.GetWinningPlayer();
+
+		if (winner == 1) {
+			std::cout << "Player 1 Wins" << std::endl;
+			m_player.SetMissionStatus(MissionStatus::kMissionSuccess);
+
+		}
+		else if (winner == 2) {
+			std::cout << "Player 2 Wins" << std::endl;
+			m_player.SetMissionStatus(MissionStatus::kMissionSuccess);
+		}
+ 	}
 
 	CommandQueue& commands = m_world.GetCommandQueue();
 	m_player.HandleRealTimeInput(commands);

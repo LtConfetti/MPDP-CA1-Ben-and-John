@@ -96,6 +96,11 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 		std::unique_ptr<TextNode> missile_display(new TextNode(fonts, *missile_ammo));
 		m_missile_display = missile_display.get();
 		AttachChild(std::move(missile_display));
+
+		std::string* score = new std::string("");
+		std::unique_ptr<TextNode> score_display(new TextNode(fonts, *score));
+		m_score_display = score_display.get();
+		AttachChild(std::move(score_display));
 	}
 	UpdateTexts();
 }
@@ -162,7 +167,12 @@ void Aircraft::UpdateTexts()
 	if (m_score_display)
 	{
 		m_score_display->setPosition(sf::Vector2f(0.f, 90.f));
-		m_score_display->SetString("Score: " + std::to_string(m_current_score));
+		if (IsAllied()) {
+			m_score_display->SetString("Score 1: " + std::to_string(m_current_score));
+		}
+		else if (IsPlayer2()) {
+			m_score_display->SetString("Score 2: " + std::to_string(m_current_score));
+		}
 	}
 }
 
