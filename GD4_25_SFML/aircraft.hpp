@@ -30,6 +30,9 @@ public:
 	sf::FloatRect GetBoundingRect() const override;
 	bool IsMarkedForRemoval() const override;
 
+	void PlayLocalSound(CommandQueue& commands, SoundEffect effect);
+
+
 private:
 	virtual void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual void UpdateCurrent(sf::Time dt, CommandQueue& commands) override;
@@ -61,6 +64,7 @@ private:
 	unsigned int m_spread_level;
 	unsigned int m_spread_level2;
 	unsigned int m_missile_ammo;
+
 
 	bool m_is_firing;
 	bool m_is_launching_missile;

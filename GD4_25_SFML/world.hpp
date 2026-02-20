@@ -4,6 +4,7 @@
 #include "scene_node.hpp"
 #include "scene_layers.hpp"
 #include "aircraft.hpp"
+#include "sound_player.hpp"
 #include "command_queue.hpp"
 #include "pointbox.hpp"
 #include "pointbox_type.hpp"
@@ -11,7 +12,7 @@
 class World
 {
 public:
-	explicit World(sf::RenderWindow& window, FontHolder& font);
+	explicit World(sf::RenderWindow& window, SoundPlayer& sound, FontHolder& font);
 	void Update(sf::Time dt);
 	void Draw();
 
@@ -43,6 +44,8 @@ private:
 	void SpawnPointBoxes();
 	void UpdatePointBoxSpawning(sf::Time dt);
 
+	void UpdateSounds();
+
 private:
 	struct SpawnPoint
 	{
@@ -60,6 +63,7 @@ private:
 	sf::View m_camera;
 	TextureHolder m_textures;
 	FontHolder& m_fonts;
+	SoundPlayer& m_sounds;
 	SceneNode m_scene_graph;
 	std::array<SceneNode*, static_cast<int>(SceneLayers::kLayerCount)> m_scene_layers;
 	sf::FloatRect m_world_bounds;

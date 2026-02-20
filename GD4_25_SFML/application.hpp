@@ -22,6 +22,7 @@ private:
 	sf::RenderWindow m_window;
 	Player* m_player;
 	Player2* m_player2;
+	SoundPlayer m_sound;	
 
 	TextureHolder m_textures;
 	FontHolder m_fonts;

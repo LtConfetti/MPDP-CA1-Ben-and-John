@@ -8,6 +8,7 @@
 #include "pickup.hpp"
 #include "projectile_type.hpp"
 #include <iostream>
+#include "sound_node.hpp"
 
 
 namespace
@@ -219,6 +220,7 @@ void Aircraft::CreateBullet(SceneNode& node, const TextureHolder& textures) cons
 	{
 	case 1:
 		CreateProjectile(node, type, 0.0f, 0.5f, textures);
+		
 		break;
 	case 2:
 		CreateProjectile(node, type, -0.5f, 0.5f, textures);
@@ -255,7 +257,7 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	sf::Vector2f offset(x_offset * m_sprite.getGlobalBounds().size.x, y_offset * m_sprite.getGlobalBounds().size.y);
 	sf::Vector2f velocity(0, projectile->GetMaxSpeed());
 
-	float sign = IsAllied() ? -1.f: 1.f;
+	float sign = IsAllied() or IsPlayer2() ? -1.f : 1.f;
 	projectile->setPosition(GetWorldPosition() + offset * sign);
 	projectile->SetVelocity(velocity * sign);
 	node.AttachChild(std::move(projectile));
@@ -305,7 +307,7 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 
 void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
-	if (!IsAllied()|| !IsPlayer2())
+	if (!IsAllied() and !IsPlayer2())
 	{
 		Fire();
 	}
@@ -315,6 +317,8 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 		commands.Push(m_fire_command);
 		m_fire_countdown += Table[static_cast<int>(m_type)].m_fire_interval / (m_fire_rate + 1.f);
 		m_is_firing = false;
+		PlayLocalSound(commands, IsAllied() or IsPlayer2() ? SoundEffect::kEnemyGunfire : SoundEffect::kAlliedGunfire);
+
 	}
 	else if (m_fire_countdown > sf::Time::Zero)
 	{
@@ -352,6 +356,22 @@ void Aircraft::CreatePickup(SceneNode& node, const TextureHolder& textures)
 	}
 	m_spawned_pickup = true;
 }
+
+
+void Aircraft::PlayLocalSound(CommandQueue& commands, SoundEffect effect)
+{
+	sf::Vector2f world_position = GetWorldPosition();
+
+	Command command;
+	command.category = static_cast<int>(ReceiverCategories::kSoundEffect);
+	command.action = DerivedAction<SoundNode>(
+		[effect, world_position](SoundNode& node, sf::Time)
+		{
+			node.PlaySound(effect, world_position);
+		});
+	commands.Push(command);
+}
+
 
 void Aircraft::CheckPickupDrop(CommandQueue& commands)
 {

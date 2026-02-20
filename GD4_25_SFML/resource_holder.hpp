@@ -1,6 +1,8 @@
 #pragma once
 #include <map>
 #include <string>
+#include <memory>
+
 
 template<typename Identifier, typename Resource>
 class ResourceHolder
@@ -16,5 +18,4 @@ private:
     std::map<Identifier, std::unique_ptr<Resource>> m_resource_map;
 };
 
-#include "resource_holder.inl"
-    
+#include "resource_holder.inl"  

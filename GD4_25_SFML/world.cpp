@@ -8,19 +8,21 @@
 #include "pointbox.hpp"
 #include "pointbox_type.hpp"
 #include "utility.hpp"
+#include "sound_node.hpp"
 
-World::World(sf::RenderWindow& window, FontHolder& font)
+World::World(sf::RenderWindow& window, SoundPlayer& sounds, FontHolder& font)
 	: m_window(window)
 	, m_camera(window.getDefaultView())
 	, m_textures()
+	, m_sounds(sounds)
 	, m_fonts(font)
 	, m_scene_graph(ReceiverCategories::kNone)
 	, m_scene_layers()
 	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_camera.getSize().x, 3000.f))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
 	//, m_scroll_speed(-100.f)
-	, m_player_aircraft(nullptr)
-	, m_player_aircraft2(nullptr)
+	, m_player_aircraft()
+	, m_player_aircraft2()
 	, m_pointbox_spawn_timer(sf::Time::Zero) //Timer
 	, m_player_score(0) //Player Score Count
 {
@@ -34,12 +36,14 @@ void World::Update(sf::Time dt)
 	//Scroll the world
 	//m_camera.move(sf::Vector2f(0, m_scroll_speed * dt.asSeconds()));
 
+
 	m_player_aircraft->SetVelocity(0.f, 0.f);
 	m_player_aircraft2->SetVelocity(0.f, 0.f);
 
-
 	DestroyEntitiesOutsideView();
 	GuideMissiles();
+
+	UpdateSounds();
 
 	//Process commands from the scenegraph
 	while (!m_command_queue.IsEmpty())
@@ -425,6 +429,20 @@ void World::SpawnPointBoxes() {
 
 bool World::HasPlayerReachedPoints() const{
 	return m_player_aircraft->GetScore() >= 30; 
+}
+
+
+void World::UpdateSounds()
+{
+	sf::Vector2f listener_position;
+
+	listener_position = m_camera.getCenter();
+
+
+
+	m_sounds.SetListenerPosition(listener_position);
+
+	m_sounds.RemoveStoppedSounds();
 }
 
 

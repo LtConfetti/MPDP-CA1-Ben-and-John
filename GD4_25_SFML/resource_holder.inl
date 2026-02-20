@@ -1,8 +1,9 @@
-//TODO ?? can we preinstantiate each type and write as .hpp and .cpp
+
 #pragma once
 #include "resource_holder.hpp"
 #include <string>
 #include <SFML/Graphics/Font.hpp>
+#include <iostream>
 
 template<typename Identifier, typename Resource>
 void ResourceHolder<Identifier, Resource>::Load(const Identifier id, const std::string& filename)
@@ -17,7 +18,7 @@ void ResourceHolder<Identifier, Resource>::Load(const Identifier id, const std::
     {
         loaded = resource->loadFromFile(filename);
     }
-    if(!loaded)
+    if (!loaded)
     {
         throw std::runtime_error("ResourceHolder::Load failed to load " + filename);
     }

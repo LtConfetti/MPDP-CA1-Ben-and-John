@@ -102,6 +102,15 @@
     <ClCompile Include="Player2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pointbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sound_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sound_player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utility.hpp">
@@ -230,7 +239,13 @@
     <ClInclude Include="game_over_state.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="player2.hpp">
+    <ClInclude Include="sound_effect.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sound_node.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sound_player.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
