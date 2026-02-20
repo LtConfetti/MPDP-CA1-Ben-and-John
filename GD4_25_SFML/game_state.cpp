@@ -28,7 +28,7 @@ bool GameState::Update(sf::Time dt)
 
 	CommandQueue& commands = m_world.GetCommandQueue();
 	m_player.HandleRealTimeInput(commands);
-	m_player.HandleRealTimeInput(commands);
+	m_player2.HandleRealTimeInput(commands);
 	return true;
 }
 

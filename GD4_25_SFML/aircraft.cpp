@@ -81,7 +81,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 		m_missile_display = missile_display.get();
 		AttachChild(std::move(missile_display));
 	}
-	else if (Aircraft::GetCategory() == static_cast<int>(ReceiverCategories::Player2Aircraft))
+	else if (Aircraft::GetCategory() == static_cast<int>(ReceiverCategories::kPlayer2Aircraft))
 	{
 		std::string* missile_ammo = new std::string("");
 		std::unique_ptr<TextNode> missile_display(new TextNode(fonts, *missile_ammo));
@@ -99,7 +99,7 @@ unsigned int Aircraft::GetCategory() const
 	}
 	else if (IsPlayer2())
 	{
-		return static_cast<unsigned int>(ReceiverCategories::Player2Aircraft);
+		return static_cast<unsigned int>(ReceiverCategories::kPlayer2Aircraft);
 	}
 	return static_cast<unsigned int>(ReceiverCategories::kEnemyAircraft);
 }
