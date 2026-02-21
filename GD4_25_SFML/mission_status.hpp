@@ -3,5 +3,7 @@ enum class MissionStatus
 {
 	kMissionRunning,
 	kMissionSuccess,
-	kMissionFailure
+	kMissionFailure,
+	kPlayer1Wins,
+	kPlayer2Wins
 };

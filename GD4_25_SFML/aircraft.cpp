@@ -53,6 +53,10 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 
 	, m_score_display(nullptr)
 	, m_current_score(0)
+
+	, m_textures(textures)
+	, m_anim_timer(sf::Time::Zero)
+	, m_anime_frame(0)
 {
 	Utility::CentreOrigin(m_sprite);
 
@@ -97,6 +101,11 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 		std::unique_ptr<TextNode> missile_display(new TextNode(fonts, *missile_ammo));
 		m_missile_display = missile_display.get();
 		AttachChild(std::move(missile_display));
+
+		std::string* score = new std::string("");
+		std::unique_ptr<TextNode> score_display(new TextNode(fonts, *score));
+		m_score_display = score_display.get();
+		AttachChild(std::move(score_display));
 	}
 	UpdateTexts();
 }
@@ -137,13 +146,13 @@ void Aircraft::CollectMissile(unsigned int count)
 
 void Aircraft::AddScore(int points)
 {
-	m_current_score += points;
+	m_current_score = std::max(0, m_current_score += points); //stops from going below 0
 	UpdateTexts();
 }
 
 void Aircraft::UpdateTexts()
 {
-	m_health_display->SetString(std::to_string(GetHitPoints()) + "HP");
+	/*m_health_display->SetString(std::to_string(GetHitPoints()) + "HP");
 	m_health_display->setPosition(sf::Vector2f(0.f, 50.f));
 	m_health_display->setRotation(-getRotation());
 
@@ -158,12 +167,17 @@ void Aircraft::UpdateTexts()
 		{
 			m_missile_display->SetString("M: " + std::to_string(m_missile_ammo));
 		}
-	}
+	}*/
 
 	if (m_score_display)
 	{
-		m_score_display->setPosition(sf::Vector2f(0.f, 90.f));
-		m_score_display->SetString("Score: " + std::to_string(m_current_score));
+		m_score_display->setPosition(sf::Vector2f(0.f, 50.f));
+		if (IsAllied()) {
+			m_score_display->SetString("Score 1: " + std::to_string(m_current_score));
+		}
+		else if (IsPlayer2()) {
+			m_score_display->SetString("Score 2: " + std::to_string(m_current_score));
+		}
 	}
 }
 
@@ -215,7 +229,7 @@ void Aircraft::LaunchMissile()
 
 void Aircraft::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 {
-	ProjectileType type = IsAllied() ? ProjectileType::kAlliedBullet : ProjectileType::kEnemyBullet;
+	ProjectileType type = (IsAllied()) ? ProjectileType::kAlliedBullet : ProjectileType::kEnemyBullet;
 	switch (m_spread_level)
 	{
 	case 1:
@@ -257,7 +271,9 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	sf::Vector2f offset(x_offset * m_sprite.getGlobalBounds().size.x, y_offset * m_sprite.getGlobalBounds().size.y);
 	sf::Vector2f velocity(0, projectile->GetMaxSpeed());
 
-	float sign = IsAllied() or IsPlayer2() ? -1.f : 1.f;
+
+	float sign = (IsAllied() || IsPlayer2()) ? -1.f: 1.f;
+
 	projectile->setPosition(GetWorldPosition() + offset * sign);
 	projectile->SetVelocity(velocity * sign);
 	node.AttachChild(std::move(projectile));
@@ -307,11 +323,16 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 
 	//Check if bullets or missiles were fired
 	CheckProjectileLaunch(dt, commands);
+
+	if (IsAllied() || IsPlayer2()) {
+		UpdateAnimation(dt);
+	}
 }
 
 void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
-	if (!IsAllied() and !IsPlayer2())
+
+	if (!IsAllied() && !IsPlayer2())
 	{
 		Fire();
 	}
@@ -387,4 +408,36 @@ void Aircraft::CheckPickupDrop(CommandQueue& commands)
 
 int Aircraft::GetScore() {
 	return m_current_score;
+}
+
+void Aircraft::UpdateAnimation(sf::Time dt) {
+	//AI WAS USED IN THE CREATION OF THIS FUNCTION
+	sf::Vector2f vel = GetVelocity();
+	bool isMoving = (vel.x != 0.f || vel.y != 0.f);
+
+	if (isMoving) {
+		m_anim_timer += dt;
+		if (m_anim_timer.asSeconds() >= kFrameTime) {
+			m_anime_frame = (m_anime_frame + 1) % 2;
+			m_anim_timer = sf::Time::Zero;
+
+			TextureID frame;
+			if (IsAllied()) {
+				frame = (m_anime_frame == 0) ? TextureID::kPlayer1Walk1 : TextureID::kPlayer1Walk2;
+			}
+			else {
+				frame = (m_anime_frame == 0) ? TextureID::kPlayer2Walk1 : TextureID::kPlayer2Walk2;
+			}
+
+			m_sprite.setTexture(m_textures.Get(frame));
+			Utility::CentreOrigin(m_sprite);
+		}
+	}
+	else {
+		m_anim_timer = sf::Time::Zero;
+		m_anime_frame = 0;
+		TextureID defaultTex = IsAllied() ? TextureID::kEagle : TextureID::kEagle2;
+		m_sprite.setTexture(m_textures.Get(defaultTex));
+		Utility::CentreOrigin(m_sprite);
+	}
 }

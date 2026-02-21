@@ -20,11 +20,14 @@ World::World(sf::RenderWindow& window, SoundPlayer& sounds, FontHolder& font)
 	, m_scene_layers()
 	, m_world_bounds(sf::Vector2f(0.f, 0.f), sf::Vector2f(m_camera.getSize().x, 3000.f))
 	, m_spawn_position(m_camera.getSize().x / 2.f, m_world_bounds.size.y - m_camera.getSize().y/2.f)
+	, m_spawn_position2(m_camera.getSize().x / 2.f + 100.f, m_world_bounds.size.y - m_camera.getSize().y / 2.f)
 	//, m_scroll_speed(-100.f)
 	, m_player_aircraft()
 	, m_player_aircraft2()
 	, m_pointbox_spawn_timer(sf::Time::Zero) //Timer
-	, m_player_score(0) //Player Score Count
+	, m_player1_score(0) //Player 1 Score Count
+	, m_player2_score(0) //Player 2 score
+
 {
 	LoadTextures();
 	BuildScene();
@@ -88,8 +91,8 @@ bool World::HasPlayerReachedEnd() const
 
 void World::LoadTextures()
 {
-	m_textures.Load(TextureID::kEagle, "Media/Textures/Eagle.png");
-	m_textures.Load(TextureID::kEagle2, "Media/Textures/Eagle1.png");
+	m_textures.Load(TextureID::kEagle, "Media/Textures/Player1.png");
+	m_textures.Load(TextureID::kEagle2, "Media/Textures/Player2.png");
 	m_textures.Load(TextureID::kRaptor, "Media/Textures/Raptor.png");
 	m_textures.Load(TextureID::kLandscape, "Media/Textures/Desert.png");
 	m_textures.Load(TextureID::kBullet, "Media/Textures/Bullet.png");
@@ -105,6 +108,10 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kPointBoxPlusTwo, "Media/Textures/box_plus_two.png");
 	m_textures.Load(TextureID::kPointBoxPlusThree, "Media/Textures/box_plus_three.png");
 
+	m_textures.Load(TextureID::kPlayer1Walk1, "Media/Textures/Player1_Walk1.png");
+	m_textures.Load(TextureID::kPlayer1Walk2, "Media/Textures/Player1_Walk2.png");
+	m_textures.Load(TextureID::kPlayer2Walk1, "Media/Textures/Player2_Walk1.png");
+	m_textures.Load(TextureID::kPlayer2Walk2, "Media/Textures/Player2_Walk2.png");
 }
 
 void World::BuildScene()
@@ -353,7 +360,17 @@ void World::HandleCollisions()
 			pickup.Apply(player);
 			pickup.Destroy();
 		}
-		else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kEnemyProjectile) || MatchesCategories(pair,ReceiverCategories::kEnemyAircraft, ReceiverCategories::kAlliedProjectile))
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kPickup))
+		{
+			auto& player = static_cast<Aircraft&>(*pair.first);
+			auto& pickup = static_cast<Pickup&>(*pair.second);
+			std::cout << "Collision: Player2 vs Pickup" << std::endl;
+
+			//Collision response
+			pickup.Apply(player);
+			pickup.Destroy();
+		}
+	/*else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kEnemyProjectile) || MatchesCategories(pair, ReceiverCategories::kEnemyAircraft, ReceiverCategories::kAlliedProjectile))
 		{
 			auto& aircraft = static_cast<Aircraft&>(*pair.first);
 			auto& projectile = static_cast<Projectile&>(*pair.second);
@@ -362,17 +379,55 @@ void World::HandleCollisions()
 
 			aircraft.Damage(projectile.GetDamage());
 			projectile.Destroy();
+		}*/
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kEnemyProjectile))
+		{
+			//WHEN PLAYER 1 SHOT, REMOVES 1 SCORE FROM PLAYER 1
+			auto& aircraft = static_cast<Aircraft&>(*pair.first);
+			auto& projectile = static_cast<Projectile&>(*pair.second);
+			//Collision response
+			std::cout << "Collision: Aircraft vs Projectile" << std::endl;
+
+			aircraft.AddScore(-1);
+			m_player1_score -= 1;
+			projectile.Destroy();
+		}
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kAlliedProjectile))
+		{
+			//WHEN PLAYER 2 SHOT, REMOVES 1 SCORE FROM PLAYER 1
+			auto& aircraft = static_cast<Aircraft&>(*pair.first);
+			auto& projectile = static_cast<Projectile&>(*pair.second);
+			//Collision response
+			std::cout << "Collision: Aircraft vs Projectile" << std::endl;
+
+			aircraft.AddScore(-1);
+			m_player2_score -= 1;
+			projectile.Destroy();
 		}
 		else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kPointBox)) {
+			//PLAYER 1 COLLISION W/ POINTBOXES
 			auto& player = static_cast<Aircraft&>(*pair.first);
 			auto& pointbox = static_cast<PointBox&>(*pair.second);
 
 			int points = pointbox.GetPointValue();
-			m_player_score += points;
+			m_player1_score += points;
 			player.AddScore(points);
 			player.PlayLocalSound(m_command_queue, SoundEffect::kCollectPickup);
 
-			std::cout << "current player score: " << m_player_score << std::endl;
+			std::cout << "current player 1 score: " << m_player1_score << std::endl;
+
+			pointbox.Destroy();
+		}
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kPointBox)) { 
+			//PLAYER 2 COLLISION W/ POINTBOXES
+			auto& player = static_cast<Aircraft&>(*pair.first);
+			auto& pointbox = static_cast<PointBox&>(*pair.second);
+
+			int points = pointbox.GetPointValue();
+			m_player2_score += points;
+			player.AddScore(points);
+
+			std::cout << "current player 2 score: " << m_player2_score << std::endl;
 
 			pointbox.Destroy();
 		}
@@ -396,7 +451,7 @@ void World::DestroyEntitiesOutsideView()
 }
 
 void World::UpdatePointBoxSpawning(sf::Time dt) { //Timer for boxes spawning
-	const sf::Time kSpawenInterval = sf::seconds(1.0f); //Spawn every X Seconds (3 ATM)
+	const sf::Time kSpawenInterval = sf::seconds(0.5f); //Spawn every X Seconds (3 ATM)
 	m_pointbox_spawn_timer += dt;
 
 	if (m_pointbox_spawn_timer >= kSpawenInterval)
@@ -429,8 +484,29 @@ void World::SpawnPointBoxes() {
 	std::cout << "X Spawn: " << spawn_x << " Y Spawn: " << spawn_y << std::endl;
 }
 
+int::World ::GetPlayer1Score() const {
+	return m_player1_score;
+}
+
+int World::GetPlayer2Score() const {
+	return m_player2_score;
+}
+
+int World::GetWinningPlayer() const {
+		if (m_player1_score > m_player2_score) {
+		return 1; // Player 1 wins
+	}
+	else if (m_player2_score > m_player1_score) {
+		return 2; // Player 2 wins
+	}
+	else {
+		return 0; // Any other state or smthn IG
+	}
+
+}
+
 bool World::HasPlayerReachedPoints() const{
-	return m_player_aircraft->GetScore() >= 30; 
+	return m_player_aircraft->GetScore() >= 30 || m_player_aircraft2->GetScore() >= 30;
 }
 
 

@@ -6,10 +6,27 @@ GameOverState::GameOverState(StateStack& stack, Context context)
     : State(stack, context)
     , m_game_over_text(context.fonts->Get(FontID::kMain))
     , m_elapsed_time(sf::Time::Zero)
+	, m_winner_text(context.fonts->Get(FontID::kMain))
+	, m_is_win(false)
 {
     sf::Vector2f window_size(context.window->getSize());
-
-    if (context.player->GetMissionStatus() == MissionStatus::kMissionSuccess)
+    if (context.player->GetMissionStatus() == MissionStatus::kPlayer1Wins) {
+        m_game_over_text.setString("Apple Jacks Wins!");
+        m_game_over_text.setCharacterSize(50);
+        m_game_over_text.setFillColor(sf::Color::Red);
+		Utility::CentreOrigin(m_game_over_text);
+        m_game_over_text.setPosition(sf::Vector2f(0.5 * window_size.x, 0.4 * window_size.y));
+		m_is_win = true;
+    }
+    else if (context.player->GetMissionStatus() == MissionStatus::kPlayer2Wins) {
+        m_game_over_text.setString("Jack's Apples Wins!");
+        m_game_over_text.setCharacterSize(50);
+        m_game_over_text.setFillColor(sf::Color::Green);
+        Utility::CentreOrigin(m_game_over_text);
+        m_game_over_text.setPosition(sf::Vector2f(0.5 * window_size.x, 0.4 * window_size.y));
+        m_is_win = true;
+    }
+    else if (context.player->GetMissionStatus() == MissionStatus::kMissionSuccess)
     {
         m_game_over_text.setString("Mission Success");
     }

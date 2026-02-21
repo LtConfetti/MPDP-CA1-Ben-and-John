@@ -13,6 +13,8 @@ public:
 private:
 	sf::Text m_game_over_text;
 	sf::Time m_elapsed_time;
+	sf::Text m_winner_text;
+	bool m_is_win;
 
 };
 

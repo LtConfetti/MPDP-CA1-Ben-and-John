@@ -22,6 +22,10 @@ public:
 	bool HasPlayerReachedEnd() const;
 	bool HasPlayerReachedPoints() const; //New Win Condition for Points
 
+	int GetPlayer1Score() const; //Player1 Get Points
+	int GetPlayer2Score() const; //Player 2 Get Points
+	int GetWinningPlayer() const; //Winner for GameState
+
 private:
 	void LoadTextures();
 	void BuildScene();
@@ -74,7 +78,8 @@ private:
 	Aircraft* m_player_aircraft2;
 
 	sf::Time m_pointbox_spawn_timer; //Timer to track when to spawn the boxes
-	int m_player_score; //Score for players
+	int m_player1_score; //Score for player 1
+	int m_player2_score; //Score for player 2
 
 	CommandQueue m_command_queue;
 
