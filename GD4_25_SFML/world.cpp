@@ -104,6 +104,10 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kPointBoxPlusTwo, "Media/Textures/box_plus_two.png");
 	m_textures.Load(TextureID::kPointBoxPlusThree, "Media/Textures/box_plus_three.png");
 
+	m_textures.Load(TextureID::kPlayer1Walk1, "Media/Textures/Player1_Walk1.png");
+	m_textures.Load(TextureID::kPlayer1Walk2, "Media/Textures/Player1_Walk2.png");
+	m_textures.Load(TextureID::kPlayer2Walk1, "Media/Textures/Player2_Walk1.png");
+	m_textures.Load(TextureID::kPlayer2Walk2, "Media/Textures/Player2_Walk2.png");
 }
 
 void World::BuildScene()
@@ -441,7 +445,7 @@ void World::DestroyEntitiesOutsideView()
 }
 
 void World::UpdatePointBoxSpawning(sf::Time dt) { //Timer for boxes spawning
-	const sf::Time kSpawenInterval = sf::seconds(1.0f); //Spawn every X Seconds (3 ATM)
+	const sf::Time kSpawenInterval = sf::seconds(0.5f); //Spawn every X Seconds (3 ATM)
 	m_pointbox_spawn_timer += dt;
 
 	if (m_pointbox_spawn_timer >= kSpawenInterval)

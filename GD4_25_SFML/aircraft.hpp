@@ -40,6 +40,8 @@ private:
 	void CreatePickup(SceneNode& node, const TextureHolder& textures);
 	void CheckPickupDrop(CommandQueue& commands);
 
+	void UpdateAnimation(sf::Time dt);
+
 private:
 	AircraftType m_type;
 	sf::Sprite m_sprite;
@@ -69,6 +71,11 @@ private:
 	sf::Time m_fire_countdown;
 
 	bool m_is_marked_for_removal;
+
+	const TextureHolder& m_textures; //reference for swapping between frames
+	sf::Time m_anim_timer;
+	int m_anime_frame; //current animation frame
+	static constexpr float kFrameTime = 0.2f; //Time for each animation frame
 
 };
 
