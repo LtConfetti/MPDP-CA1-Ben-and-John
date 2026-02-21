@@ -366,10 +366,9 @@ void Aircraft::CreatePickup(SceneNode& node, const TextureHolder& textures)
 void Aircraft::PlayLocalSound(CommandQueue& commands, SoundEffect effect)
 {
 	sf::Vector2f world_position = GetWorldPosition();
-
+	std::printf("test 1");
 	Command command;
-	command.category = static_cast<int>(ReceiverCategories::kSoundEffect);
-	command.action = DerivedAction<SoundNode>(
+	command.category = static_cast<int>(ReceiverCategories::kSoundEffect);	command.action = DerivedAction<SoundNode>(
 		[effect, world_position](SoundNode& node, sf::Time)
 		{
 			node.PlaySound(effect, world_position);

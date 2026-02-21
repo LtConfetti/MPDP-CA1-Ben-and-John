@@ -10,13 +10,6 @@ void ResourceHolder<Identifier, Resource>::Load(const Identifier id, const std::
 {
     bool loaded = false;
     std::unique_ptr<Resource> resource(new Resource());
-    if (resource == nullptr)
-    {
-        std::printf("Resource is null");
-    }
-    else {
-        std::cout << resource << std::endl;
-    }
     
     if constexpr (std::is_same_v<Resource, sf::Font>)
     {

@@ -144,7 +144,8 @@ void World::BuildScene()
 
 	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(leader));
 
-
+	std::unique_ptr<SoundNode> soundNode(new SoundNode(m_sounds));
+	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(soundNode));
 	
 	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftType::kEagle2, m_textures, m_fonts));
 	m_player_aircraft2 = player2.get();
@@ -369,6 +370,7 @@ void World::HandleCollisions()
 			int points = pointbox.GetPointValue();
 			m_player_score += points;
 			player.AddScore(points);
+			player.PlayLocalSound(m_command_queue, SoundEffect::kCollectPickup);
 
 			std::cout << "current player score: " << m_player_score << std::endl;
 
