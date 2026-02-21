@@ -87,8 +87,8 @@ bool World::HasPlayerReachedEnd() const
 
 void World::LoadTextures()
 {
-	m_textures.Load(TextureID::kEagle, "Media/Textures/Eagle.png");
-	m_textures.Load(TextureID::kEagle2, "Media/Textures/Eagle1.png");
+	m_textures.Load(TextureID::kEagle, "Media/Textures/Player1.png");
+	m_textures.Load(TextureID::kEagle2, "Media/Textures/Player2.png");
 	m_textures.Load(TextureID::kRaptor, "Media/Textures/Raptor.png");
 	m_textures.Load(TextureID::kLandscape, "Media/Textures/Desert.png");
 	m_textures.Load(TextureID::kBullet, "Media/Textures/Bullet.png");
@@ -361,7 +361,7 @@ void World::HandleCollisions()
 			pickup.Apply(player);
 			pickup.Destroy();
 		}
-		else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kEnemyProjectile) || MatchesCategories(pair,ReceiverCategories::kEnemyAircraft, ReceiverCategories::kAlliedProjectile))
+	/*else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kEnemyProjectile) || MatchesCategories(pair, ReceiverCategories::kEnemyAircraft, ReceiverCategories::kAlliedProjectile))
 		{
 			auto& aircraft = static_cast<Aircraft&>(*pair.first);
 			auto& projectile = static_cast<Projectile&>(*pair.second);
@@ -370,8 +370,33 @@ void World::HandleCollisions()
 
 			aircraft.Damage(projectile.GetDamage());
 			projectile.Destroy();
+		}*/
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kEnemyProjectile) || MatchesCategories(pair, ReceiverCategories::kEnemyAircraft, ReceiverCategories::kAlliedProjectile))
+		{
+			//WHEN PLAYER 1 SHOT, REMOVES 1 SCORE FROM PLAYER 1
+			auto& aircraft = static_cast<Aircraft&>(*pair.first);
+			auto& projectile = static_cast<Projectile&>(*pair.second);
+			//Collision response
+			std::cout << "Collision: Aircraft vs Projectile" << std::endl;
+
+			aircraft.AddScore(-1);
+			m_player1_score -= 1;
+			projectile.Destroy();
+		}
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kAlliedProjectile) || MatchesCategories(pair, ReceiverCategories::kEnemyAircraft, ReceiverCategories::kAlliedProjectile))
+		{
+			//WHEN PLAYER 1 SHOT, REMOVES 1 SCORE FROM PLAYER 1
+			auto& aircraft = static_cast<Aircraft&>(*pair.first);
+			auto& projectile = static_cast<Projectile&>(*pair.second);
+			//Collision response
+			std::cout << "Collision: Aircraft vs Projectile" << std::endl;
+
+			aircraft.AddScore(-1);
+			m_player2_score -= 1;
+			projectile.Destroy();
 		}
 		else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kPointBox)) {
+			//PLAYER 1 COLLISION W/ POINTBOXES
 			auto& player = static_cast<Aircraft&>(*pair.first);
 			auto& pointbox = static_cast<PointBox&>(*pair.second);
 
@@ -383,7 +408,8 @@ void World::HandleCollisions()
 
 			pointbox.Destroy();
 		}
-		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kPointBox)) {
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kPointBox)) { 
+			//PLAYER 2 COLLISION W/ POINTBOXES
 			auto& player = static_cast<Aircraft&>(*pair.first);
 			auto& pointbox = static_cast<PointBox&>(*pair.second);
 

@@ -141,13 +141,13 @@ void Aircraft::CollectMissile(unsigned int count)
 
 void Aircraft::AddScore(int points)
 {
-	m_current_score += points;
+	m_current_score = std::max(0, m_current_score += points); //stops from going below 0
 	UpdateTexts();
 }
 
 void Aircraft::UpdateTexts()
 {
-	m_health_display->SetString(std::to_string(GetHitPoints()) + "HP");
+	/*m_health_display->SetString(std::to_string(GetHitPoints()) + "HP");
 	m_health_display->setPosition(sf::Vector2f(0.f, 50.f));
 	m_health_display->setRotation(-getRotation());
 
@@ -162,11 +162,11 @@ void Aircraft::UpdateTexts()
 		{
 			m_missile_display->SetString("M: " + std::to_string(m_missile_ammo));
 		}
-	}
+	}*/
 
 	if (m_score_display)
 	{
-		m_score_display->setPosition(sf::Vector2f(0.f, 90.f));
+		m_score_display->setPosition(sf::Vector2f(0.f, 50.f));
 		if (IsAllied()) {
 			m_score_display->SetString("Score 1: " + std::to_string(m_current_score));
 		}

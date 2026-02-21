@@ -38,6 +38,7 @@ bool GameState::Update(sf::Time dt)
 			std::cout << "Player 2 Wins" << std::endl;
 			m_player.SetMissionStatus(MissionStatus::kMissionSuccess);
 		}
+		RequestStackPush(StateID::kGameOver);
  	}
 
 	CommandQueue& commands = m_world.GetCommandQueue();
