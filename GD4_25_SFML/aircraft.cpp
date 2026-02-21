@@ -384,6 +384,7 @@ int Aircraft::GetScore() {
 }
 
 void Aircraft::UpdateAnimation(sf::Time dt) {
+	//AI WAS USED IN THE CREATION OF THIS FUNCTION
 	sf::Vector2f vel = GetVelocity();
 	bool isMoving = (vel.x != 0.f || vel.y != 0.f);
 
