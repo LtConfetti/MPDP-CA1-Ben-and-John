@@ -18,7 +18,7 @@ Player2::Player2()
     m_key_binding[sf::Keyboard::Scancode::L] = Action::kMoveRight2;
     m_key_binding[sf::Keyboard::Scancode::I] = Action::kMoveUp2;
     m_key_binding[sf::Keyboard::Scancode::K] = Action::kMoveDown2;
-    m_key_binding[sf::Keyboard::Scancode::RShift] = Action::kBulletFire;
+    m_key_binding[sf::Keyboard::Scancode::RShift] = Action::kBulletFire2;
     m_key_binding[sf::Keyboard::Scancode::M] = Action::kMissileFire;
 
     InitialiseActions();
@@ -118,7 +118,7 @@ void Player2::InitialiseActions()
     m_action_binding[Action::kMoveRight2].action = DerivedAction<Aircraft>(AircraftMover(kPlayerSpeed, 0.f));
     m_action_binding[Action::kMoveUp2].action = DerivedAction<Aircraft>(AircraftMover(0.f, -kPlayerSpeed));
     m_action_binding[Action::kMoveDown2].action = DerivedAction<Aircraft>(AircraftMover(0.f, kPlayerSpeed));
-    m_action_binding[Action::kBulletFire].action = DerivedAction<Aircraft>([](Aircraft& a, sf::Time dt)
+    m_action_binding[Action::kBulletFire2].action = DerivedAction<Aircraft>([](Aircraft& a, sf::Time dt)
         {
             a.Fire();
         }
@@ -139,7 +139,7 @@ bool Player2::IsRealTimeAction(Action action)
     case Action::kMoveRight2:
     case Action::kMoveUp2:
     case Action::kMoveDown2:
-    case Action::kBulletFire:
+    case Action::kBulletFire2:
         return true;
     default:
         return false;

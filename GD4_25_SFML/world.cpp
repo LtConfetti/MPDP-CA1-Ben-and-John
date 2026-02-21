@@ -371,7 +371,7 @@ void World::HandleCollisions()
 			aircraft.Damage(projectile.GetDamage());
 			projectile.Destroy();
 		}*/
-		else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kEnemyProjectile) || MatchesCategories(pair, ReceiverCategories::kEnemyAircraft, ReceiverCategories::kAlliedProjectile))
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kEnemyProjectile))
 		{
 			//WHEN PLAYER 1 SHOT, REMOVES 1 SCORE FROM PLAYER 1
 			auto& aircraft = static_cast<Aircraft&>(*pair.first);
@@ -383,9 +383,9 @@ void World::HandleCollisions()
 			m_player1_score -= 1;
 			projectile.Destroy();
 		}
-		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kAlliedProjectile) || MatchesCategories(pair, ReceiverCategories::kEnemyAircraft, ReceiverCategories::kAlliedProjectile))
+		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kAlliedProjectile))
 		{
-			//WHEN PLAYER 1 SHOT, REMOVES 1 SCORE FROM PLAYER 1
+			//WHEN PLAYER 2 SHOT, REMOVES 1 SCORE FROM PLAYER 1
 			auto& aircraft = static_cast<Aircraft&>(*pair.first);
 			auto& projectile = static_cast<Projectile&>(*pair.second);
 			//Collision response
