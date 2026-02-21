@@ -9,6 +9,7 @@
 #include "pointbox_type.hpp"
 #include "utility.hpp"
 #include "sound_node.hpp"
+#include "posteffect.hpp"
 
 World::World(sf::RenderWindow& window, SoundPlayer& sounds, FontHolder& font)
 	: m_window(window)
@@ -32,6 +33,7 @@ World::World(sf::RenderWindow& window, SoundPlayer& sounds, FontHolder& font)
 	LoadTextures();
 	BuildScene();
 	m_camera.setCenter(m_spawn_position);
+	m_scene_texture.resize({ window.getSize().x, window.getSize().y });
 }
 
 void World::Update(sf::Time dt)
@@ -68,8 +70,20 @@ void World::Update(sf::Time dt)
 
 void World::Draw()
 {
-	m_window.setView(m_camera);
-	m_window.draw(m_scene_graph);
+	if (PostEffect::IsSupported())
+	{
+		m_scene_texture.clear();
+		m_scene_texture.setView(m_camera);
+		m_scene_texture.draw(m_scene_graph);
+		m_scene_texture.display();
+		m_bloom_effect.Apply(m_scene_texture, m_window);
+	}
+	else
+	{
+		m_window.setView(m_camera);
+		m_window.draw(m_scene_graph);
+	}
+
 }
 
 

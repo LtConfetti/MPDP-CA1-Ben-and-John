@@ -8,6 +8,7 @@
 #include "command_queue.hpp"
 #include "pointbox.hpp"
 #include "pointbox_type.hpp"
+#include "bloom_effect.hpp"
 
 class World
 {
@@ -85,5 +86,8 @@ private:
 
 	std::vector<SpawnPoint> m_enemy_spawn_points;
 	std::vector<Aircraft*> m_active_enemies;
+
+	sf::RenderTexture m_scene_texture; //For Bloom Effect
+	BloomEffect m_bloom_effect; 
 };
 

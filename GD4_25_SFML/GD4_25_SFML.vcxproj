@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="aircraft.cpp" />
     <ClCompile Include="application.cpp" />
+    <ClCompile Include="bloom_effect.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="command.cpp" />
     <ClCompile Include="command_queue.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="Player2.cpp" />
     <ClCompile Include="pointbox.cpp" />
+    <ClCompile Include="posteffect.cpp" />
     <ClCompile Include="projectile.cpp" />
     <ClCompile Include="scene_node.cpp" />
     <ClCompile Include="settings_state.cpp" />
@@ -168,6 +170,7 @@
     <ClInclude Include="aircraft.hpp" />
     <ClInclude Include="aircraft_type.hpp" />
     <ClInclude Include="application.hpp" />
+    <ClInclude Include="bloom_effect.hpp" />
     <ClInclude Include="button.hpp" />
     <ClInclude Include="command.hpp" />
     <ClInclude Include="command_queue.hpp" />
@@ -187,6 +190,7 @@
     <ClInclude Include="pickup.hpp" />
     <ClInclude Include="pickup_type.hpp" />
     <ClInclude Include="player.hpp" />
+    <ClInclude Include="posteffect.hpp" />
     <ClInclude Include="projectile.hpp" />
     <ClInclude Include="projectile_type.hpp" />
     <ClInclude Include="receiver_categories.hpp" />
@@ -195,6 +199,7 @@
     <ClInclude Include="scene_layers.hpp" />
     <ClInclude Include="scene_node.hpp" />
     <ClInclude Include="settings_state.hpp" />
+    <ClInclude Include="shader_types.hpp" />
     <ClInclude Include="sound_effect.hpp" />
     <ClInclude Include="sound_node.hpp" />
     <ClInclude Include="sound_player.hpp" />
