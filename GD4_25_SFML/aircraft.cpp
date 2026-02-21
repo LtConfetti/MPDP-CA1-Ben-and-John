@@ -293,8 +293,12 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 {
 	if (IsDestroyed())
 	{
+
 		CheckPickupDrop(commands);
 		m_is_marked_for_removal = true;
+
+		SoundEffect soundEffect = (Utility::RandomInt(2) == 0) ? SoundEffect::kExplosion1 : SoundEffect::kExplosion2;
+		PlayLocalSound(commands, soundEffect);
 		return;
 	}
 	Entity::UpdateCurrent(dt, commands);
@@ -329,6 +333,7 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 	//Missile launch
 	if (m_is_launching_missile)
 	{
+		PlayLocalSound(commands, SoundEffect::kLaunchMissile);
 		commands.Push(m_missile_command);
 		m_is_launching_missile = false;
 	}
