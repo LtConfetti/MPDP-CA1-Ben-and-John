@@ -11,6 +11,5 @@ enum class Action
 	kMoveDown2,
 	kBulletFire2,
 	kBulletFire,
-	kMissileFire,
 	kActionCount
 };

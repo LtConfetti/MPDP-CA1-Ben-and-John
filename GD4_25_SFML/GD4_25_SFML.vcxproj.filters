@@ -93,9 +93,6 @@
     <ClCompile Include="projectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pickup.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="game_over_state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -230,13 +227,7 @@
     <ClInclude Include="projectile_type.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pickup_type.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="projectile.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pickup.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mission_status.hpp">

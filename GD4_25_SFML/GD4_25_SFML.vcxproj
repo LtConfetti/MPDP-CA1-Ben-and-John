@@ -146,7 +146,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu_state.cpp" />
     <ClCompile Include="pause_state.cpp" />
-    <ClCompile Include="pickup.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="Player2.cpp" />
     <ClCompile Include="pointbox.cpp" />
@@ -187,8 +186,6 @@
     <ClInclude Include="menu_state.hpp" />
     <ClInclude Include="mission_status.hpp" />
     <ClInclude Include="pause_state.hpp" />
-    <ClInclude Include="pickup.hpp" />
-    <ClInclude Include="pickup_type.hpp" />
     <ClInclude Include="player.hpp" />
     <ClInclude Include="posteffect.hpp" />
     <ClInclude Include="projectile.hpp" />

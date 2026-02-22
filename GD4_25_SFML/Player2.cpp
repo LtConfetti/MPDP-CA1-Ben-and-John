@@ -19,7 +19,6 @@ Player2::Player2()
     m_key_binding[sf::Keyboard::Scancode::I] = Action::kMoveUp2;
     m_key_binding[sf::Keyboard::Scancode::K] = Action::kMoveDown2;
     m_key_binding[sf::Keyboard::Scancode::RShift] = Action::kBulletFire2;
-    m_key_binding[sf::Keyboard::Scancode::M] = Action::kMissileFire;
 
     InitialiseActions();
 
@@ -75,6 +74,7 @@ void Player2::HandleRealTimeInput(CommandQueue& command_queue)
 void Player2::AssignKey(Action action, sf::Keyboard::Scancode key)
 {
     //Remove keys that are currently bound to the action
+    //Remove keys that are currently bound to the action
     for (auto itr = m_key_binding.begin(); itr != m_key_binding.end();)
     {
         if (itr->second == action)
@@ -121,11 +121,6 @@ void Player2::InitialiseActions()
     m_action_binding[Action::kBulletFire2].action = DerivedAction<Aircraft>([](Aircraft& a, sf::Time dt)
         {
             a.Fire();
-        }
-    );
-    m_action_binding[Action::kMissileFire].action = DerivedAction<Aircraft>([](Aircraft& a, sf::Time dt)
-        {
-            a.LaunchMissile();
         }
     );
 

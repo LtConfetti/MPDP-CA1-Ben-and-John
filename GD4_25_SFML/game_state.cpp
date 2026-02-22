@@ -16,17 +16,7 @@ bool GameState::Update(sf::Time dt)
 {
 	m_world.Update(dt);
 
-	if (!m_world.HasAlivePlayer())
-	{
-		m_player.SetMissionStatus(MissionStatus::kMissionFailure);
-		RequestStackPush(StateID::kGameOver);
-	}
-	else if (m_world.HasPlayerReachedEnd())
-	{
-		m_player.SetMissionStatus(MissionStatus::kMissionSuccess);
-		RequestStackPush(StateID::kGameOver);
-	}
-	else if (m_world.HasPlayerReachedPoints()) {
+	if (m_world.HasPlayerReachedPoints()) {
 		int winner = m_world.GetWinningPlayer();
 
 		if (winner == 1) {
@@ -53,6 +43,7 @@ bool GameState::HandleEvent(const sf::Event& event)
 	m_player.HandleEvent(event, commands);
 	m_player2.HandleEvent(event, commands);
 
+	//Escape should bring up the pause menu
 	//Escape should bring up the pause menu
 	const auto* keypress = event.getIf<sf::Event::KeyPressed>();
 	if(keypress && keypress->scancode == sf::Keyboard::Scancode::Escape)

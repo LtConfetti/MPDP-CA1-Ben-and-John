@@ -29,12 +29,6 @@ struct ProjectileData
 	TextureID m_texture;
 };
 
-struct PickupData
-{
-	std::function<void(Aircraft&)> m_action;
-	TextureID m_texture;
-};
-
 struct PointBoxData
 {
 	int m_point_value;
@@ -45,6 +39,5 @@ struct PointBoxData
 
 std::vector<AircraftData> InitializeAircraftData();
 std::vector<ProjectileData> InitializeProjectileData();
-std::vector<PickupData> InitializePickupData();
 std::vector<PointBoxData> InitializePointBoxData();
 

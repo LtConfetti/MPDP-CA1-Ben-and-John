@@ -3,9 +3,7 @@
 #include "data_tables.hpp"
 #include "utility.hpp"
 #include "constants.hpp"
-#include "pickup_type.hpp"
 #include "projectile.hpp"
-#include "pickup.hpp"
 #include "projectile_type.hpp"
 #include <iostream>
 #include "sound_node.hpp"
@@ -26,9 +24,6 @@ TextureID ToTextureID(AircraftType type)
 	case AircraftType::kEagle2:
 		return TextureID::kEagle2;
 		break;
-	case AircraftType::kRaptor:
-		return TextureID::kRaptor;
-		break;
 	}
 	return TextureID::kEagle;
 }
@@ -38,22 +33,12 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 	, m_type(type) 
 	, m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture))
 	, m_health_display(nullptr)
-	, m_missile_display(nullptr)
-	, m_distance_travelled(0.f) 
-	, m_directions_index(0)
 	, m_fire_rate(1)
-	, m_spread_level(1)
-	, m_spread_level2(1)
 	, m_is_firing(false)
-	, m_is_launching_missile(false)
 	, m_fire_countdown(sf::Time::Zero)
-	, m_missile_ammo(2)
 	, m_is_marked_for_removal(false)
-	, m_spawned_pickup(false)
-
 	, m_score_display(nullptr)
 	, m_current_score(0)
-
 	, m_textures(textures)
 	, m_anim_timer(sf::Time::Zero)
 	, m_anime_frame(0)
@@ -66,17 +51,6 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 			CreateBullet(node, textures);
 		};
 
-	m_missile_command.category = static_cast<int>(ReceiverCategories::kScene);
-	m_missile_command.action = [this, &textures](SceneNode& node, sf::Time dt)
-		{
-			CreateProjectile(node, ProjectileType::kMissile, 0.f, 0.5f, textures);
-		};
-	m_drop_pickup_command.category = static_cast<int>(ReceiverCategories::kScene);
-	m_drop_pickup_command.action = [this, &textures](SceneNode& node, sf::Time dt)
-		{
-			CreatePickup(node, textures);
-		};
-
 	std::string* health = new std::string("");
 	std::unique_ptr<TextNode> health_display(new TextNode(fonts, *health));
 	m_health_display = health_display.get();
@@ -84,11 +58,6 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 
 	if (Aircraft::GetCategory() == static_cast<int>(ReceiverCategories::kPlayerAircraft))
 	{
-		std::string* missile_ammo = new std::string("");
-		std::unique_ptr<TextNode> missile_display(new TextNode(fonts, *missile_ammo));
-		m_missile_display = missile_display.get();
-		AttachChild(std::move(missile_display));
-
 		//Collecting and adding Score
 		std::string* score = new std::string("");
 		std::unique_ptr<TextNode> score_display(new TextNode(fonts, *score));
@@ -98,11 +67,6 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 	}
 	else if (Aircraft::GetCategory() == static_cast<int>(ReceiverCategories::kPlayer2Aircraft))
 	{
-		std::string* missile_ammo = new std::string("");
-		std::unique_ptr<TextNode> missile_display(new TextNode(fonts, *missile_ammo));
-		m_missile_display = missile_display.get();
-		AttachChild(std::move(missile_display));
-
 		std::string* score = new std::string("");
 		std::unique_ptr<TextNode> score_display(new TextNode(fonts, *score));
 		m_score_display = score_display.get();
@@ -125,27 +89,6 @@ unsigned int Aircraft::GetCategory() const
 	return static_cast<unsigned int>(ReceiverCategories::kEnemyAircraft);
 }
 
-void Aircraft::IncreaseFireRate()
-{
-	if (m_fire_rate < kMaxFireRate)
-	{
-		++m_fire_rate;
-	}
-}
-
-void Aircraft::IncreaseFireSpread()
-{
-	if (m_spread_level < kMaxSpread)
-	{
-		++m_spread_level;
-	}
-}
-
-void Aircraft::CollectMissile(unsigned int count)
-{
-	m_missile_ammo += count;
-}
-
 void Aircraft::AddScore(int points)
 {
 	m_current_score = std::max(0, m_current_score += points); //stops from going below 0
@@ -154,23 +97,6 @@ void Aircraft::AddScore(int points)
 
 void Aircraft::UpdateTexts()
 {
-	/*m_health_display->SetString(std::to_string(GetHitPoints()) + "HP");
-	m_health_display->setPosition(sf::Vector2f(0.f, 50.f));
-	m_health_display->setRotation(-getRotation());
-
-	if (m_missile_display)
-	{
-		m_missile_display->setPosition(sf::Vector2f(0.f, 70.f));
-		if (m_missile_ammo == 0)
-		{
-			m_missile_display->SetString("");
-		}
-		else
-		{
-			m_missile_display->SetString("M: " + std::to_string(m_missile_ammo));
-		}
-	}*/
-
 	if (m_score_display)
 	{
 		m_score_display->setPosition(sf::Vector2f(0.f, 50.f));
@@ -180,30 +106,6 @@ void Aircraft::UpdateTexts()
 		else if (IsPlayer2()) {
 			m_score_display->SetString("Score 2: " + std::to_string(m_current_score));
 		}
-	}
-}
-
-void Aircraft::UpdateMovementPattern(sf::Time dt)
-{
-	//Enemy AI
-	const std::vector<Direction>& directions = Table[static_cast<int>(m_type)].m_directions;
-	if (!directions.empty())
-	{
-		//Move along the current direction for distance and then change direction
-		if (m_distance_travelled > directions[m_directions_index].m_distance)
-		{
-			m_directions_index = (m_directions_index + 1) % directions.size();
-			m_distance_travelled = 0;
-		}
-
-		//Compute the velocity
-		//Add 90 to move down the screen, 0 degrees is to the right
-		double radians = Utility::toRadians(directions[m_directions_index].m_angle + 90.f);
-		float vx = GetMaxSpeed() * std::cos(radians);
-		float vy = GetMaxSpeed() * std::sin(radians);
-
-		SetVelocity(sf::Vector2f(vx, vy));
-		m_distance_travelled += GetMaxSpeed() * dt.asSeconds();
 	}
 }
 
@@ -220,51 +122,10 @@ void Aircraft::Fire()
 	}
 }
 
-void Aircraft::LaunchMissile()
-{
-	if (m_missile_ammo > 0)
-	{
-		m_is_launching_missile = true;
-		--m_missile_ammo;
-	}
-}
-
 void Aircraft::CreateBullet(SceneNode& node, const TextureHolder& textures) const
 {
-	ProjectileType type = (IsAllied()) ? ProjectileType::kAlliedBullet : ProjectileType::kEnemyBullet;
-	switch (m_spread_level)
-	{
-	case 1:
-		CreateProjectile(node, type, 0.0f, 0.5f, textures);
-		
-		break;
-	case 2:
-		CreateProjectile(node, type, -0.5f, 0.5f, textures);
-		CreateProjectile(node, type, 0.5f, 0.5f, textures);
-		break;
-	case 3:
-		CreateProjectile(node, type, 0.0f, 0.5f, textures);
-		CreateProjectile(node, type, -0.5f, 0.5f, textures);
-		CreateProjectile(node, type, 0.5f, 0.5f, textures);
-		break;
-	}
-
-	/*ProjectileType type2 = IsPlayer2() ? ProjectileType::kAlliedBullet : ProjectileType::kEnemyBullet;
-	switch (m_spread_level2)
-	{
-	case 1:
-		CreateProjectile(node, type2, 0.0f, 0.5f, textures);
-		break;
-	case 2:
-		CreateProjectile(node, type2, -0.5f, 0.5f, textures);
-		CreateProjectile(node, type2, 0.5f, 0.5f, textures);
-		break;
-	case 3:
-		CreateProjectile(node, type2, 0.0f, 0.5f, textures);
-		CreateProjectile(node, type2, -0.5f, 0.5f, textures);
-		CreateProjectile(node, type2, 0.5f, 0.5f, textures);
-		break;
-	}*/
+	ProjectileType type = IsAllied() ? ProjectileType::kAlliedBullet : ProjectileType::kEnemyBullet;
+	CreateProjectile(node, type, 0.0f, 0.5f, textures);
 }
 
 void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_offset, float y_offset, const TextureHolder& textures) const
@@ -273,23 +134,11 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	sf::Vector2f offset(x_offset * m_sprite.getGlobalBounds().size.x, y_offset * m_sprite.getGlobalBounds().size.y);
 	sf::Vector2f velocity(0, projectile->GetMaxSpeed());
 
-
-	float sign = (IsAllied() || IsPlayer2()) ? -1.f: 1.f;
+	float sign = (IsAllied() || IsPlayer2()) ? -1.f : 1.f;
 
 	projectile->setPosition(GetWorldPosition() + offset * sign);
 	projectile->SetVelocity(velocity * sign);
 	node.AttachChild(std::move(projectile));
-
-	//std::unique_ptr<Projectile> projectile2(new Projectile(type, textures));
-	//sf::Vector2f offset2(x_offset * m_sprite.getGlobalBounds().size.x, y_offset * m_sprite.getGlobalBounds().size.y);
-	//sf::Vector2f velocity2(0, projectile2->GetMaxSpeed());
-
-	//float sign2 = IsPlayer2() ? -1.f : 1.f;
-	//projectile2->setPosition(GetWorldPosition() + offset2 * sign2);
-	//projectile2->SetVelocity(velocity2 * sign2);
-	//node.AttachChild(std::move(projectile2));
-
-
 }
 
 sf::FloatRect Aircraft::GetBoundingRect() const
@@ -311,8 +160,6 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 {
 	if (IsDestroyed())
 	{
-
-		CheckPickupDrop(commands);
 		m_is_marked_for_removal = true;
 
 		SoundEffect soundEffect = (Utility::RandomInt(2) == 0) ? SoundEffect::kExplosion1 : SoundEffect::kExplosion2;
@@ -321,9 +168,8 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 	}
 	Entity::UpdateCurrent(dt, commands);
 	UpdateTexts();
-	UpdateMovementPattern(dt);
 
-	//Check if bullets or missiles were fired
+	//Check if bullets were fired
 	CheckProjectileLaunch(dt, commands);
 
 	if (IsAllied() || IsPlayer2()) {
@@ -333,32 +179,17 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 
 void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
-
-	if (!IsAllied() && !IsPlayer2())
-	{
-		Fire();
-	}
-
 	if (m_is_firing && m_fire_countdown <= sf::Time::Zero)
 	{
 		commands.Push(m_fire_command);
 		m_fire_countdown += Table[static_cast<int>(m_type)].m_fire_interval / (m_fire_rate + 1.f);
 		m_is_firing = false;
 		PlayLocalSound(commands, IsAllied() or IsPlayer2() ? SoundEffect::kEnemyGunfire : SoundEffect::kAlliedGunfire);
-
 	}
 	else if (m_fire_countdown > sf::Time::Zero)
 	{
 		m_fire_countdown -= dt;
 		m_is_firing = false;
-	}
-
-	//Missile launch
-	if (m_is_launching_missile)
-	{
-		PlayLocalSound(commands, SoundEffect::kLaunchMissile);
-		commands.Push(m_missile_command);
-		m_is_launching_missile = false;
 	}
 }
 
@@ -372,40 +203,17 @@ bool Aircraft::IsPlayer2() const
 	return m_type == AircraftType::kEagle2;
 }
 
-void Aircraft::CreatePickup(SceneNode& node, const TextureHolder& textures)
-{
-	if (!m_spawned_pickup)
-	{
-		auto type = static_cast<PickupType>(Utility::RandomInt(static_cast<int>(PickupType::kPickupCount)));
-		std::unique_ptr<Pickup> pickup(new Pickup(type, textures));
-		pickup->setPosition(GetWorldPosition());
-		pickup->SetVelocity(0.f, 0.f);
-		node.AttachChild(std::move(pickup));
-	}
-	m_spawned_pickup = true;
-}
-
-
 void Aircraft::PlayLocalSound(CommandQueue& commands, SoundEffect effect)
 {
 	sf::Vector2f world_position = GetWorldPosition();
-	std::printf("test 1");
 	Command command;
-	command.category = static_cast<int>(ReceiverCategories::kSoundEffect);	command.action = DerivedAction<SoundNode>(
+	command.category = static_cast<int>(ReceiverCategories::kSoundEffect);
+	command.action = DerivedAction<SoundNode>(
 		[effect, world_position](SoundNode& node, sf::Time)
 		{
 			node.PlaySound(effect, world_position);
 		});
 	commands.Push(command);
-}
-
-
-void Aircraft::CheckPickupDrop(CommandQueue& commands)
-{
-	if ((!IsAllied() || !IsPlayer2()) && Utility::RandomInt(kPickupDropChance) == 0 && !m_spawned_pickup)
-	{
-		commands.Push(m_drop_pickup_command);
-	}
 }
 
 int Aircraft::GetScore() {

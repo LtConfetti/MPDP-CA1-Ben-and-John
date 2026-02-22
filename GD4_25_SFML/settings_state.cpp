@@ -11,7 +11,6 @@ SettingsState::SettingsState(StateStack& stack, Context context)
     AddButtonLabel(Action::kMoveRight, 80.f, 250.f, "Move Right", context);
     AddButtonLabel(Action::kMoveLeft, 80.f, 300.f, "Move Left", context);
     AddButtonLabel(Action::kBulletFire, 80.f, 350.f, "Fire", context);
-    AddButtonLabel(Action::kMissileFire, 80.f, 400.f, "Missile Fire", context);
 
     AddButtonLabel(Action::kMoveUp2, 320.f, 150.f, "Move Up", context);
     AddButtonLabel(Action::kMoveDown2, 320.f, 200.f, "Move Down", context);
@@ -46,6 +45,7 @@ bool SettingsState::HandleEvent(const sf::Event& event)
 {
     bool is_key_binding = false;
 
+    //Iterate through all of the key binding buttons to see if they are being pressed, waiting for input from the user
     //Iterate through all of the key binding buttons to see if they are being pressed, waiting for input from the user
     for (std::size_t action = 0; action < static_cast<int>(Action::kActionCount); ++action)
     {

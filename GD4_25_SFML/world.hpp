@@ -19,8 +19,6 @@ public:
 
 	CommandQueue& GetCommandQueue();
 
-	bool HasAlivePlayer() const;
-	bool HasPlayerReachedEnd() const;
 	bool HasPlayerReachedPoints() const; //New Win Condition for Points
 
 	int GetPlayer1Score() const; //Player1 Get Points
@@ -33,14 +31,8 @@ private:
 	void AdaptPlayerVelocity();
 	void AdaptPlayerPosition();
 
-	void SpawnEnemies();
-	void AddEnemies();
-	void AddEnemy(AircraftType type, float relx, float rely);
-
 	sf::FloatRect GetViewBounds() const;
 	sf::FloatRect GetBattleFieldBounds() const;
-
-	void GuideMissiles();
 
 	void HandleCollisions();
 
@@ -50,18 +42,6 @@ private:
 	void UpdatePointBoxSpawning(sf::Time dt);
 
 	void UpdateSounds();
-
-private:
-	struct SpawnPoint
-	{
-		SpawnPoint(AircraftType type, float x, float y) :m_type(type), m_x(x), m_y(y)
-		{
-
-		}
-		AircraftType m_type;
-		float m_x;
-		float m_y;
-	};
 
 private:
 	sf::RenderWindow& m_window;
@@ -74,7 +54,6 @@ private:
 	sf::FloatRect m_world_bounds;
 	sf::Vector2f m_spawn_position;
 	sf::Vector2f m_spawn_position2;
-	float m_scroll_speed;
 	Aircraft* m_player_aircraft;
 	Aircraft* m_player_aircraft2;
 
@@ -84,10 +63,6 @@ private:
 
 	CommandQueue m_command_queue;
 
-	std::vector<SpawnPoint> m_enemy_spawn_points;
-	std::vector<Aircraft*> m_active_enemies;
-
 	sf::RenderTexture m_scene_texture; //For Bloom Effect
-	BloomEffect m_bloom_effect; 
+	BloomEffect m_bloom_effect;
 };
-
