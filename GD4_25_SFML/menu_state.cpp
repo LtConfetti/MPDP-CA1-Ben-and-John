@@ -8,7 +8,7 @@
 MenuState::MenuState(StateStack& stack, Context context) : State(stack, context), m_background_sprite(context.textures->Get(TextureID::kTitleScreen))
 {
     auto play_button = std::make_shared<gui::Button>(*context.fonts, *context.textures);
-    play_button->setPosition(sf::Vector2f(100, 250));
+    play_button->setPosition(sf::Vector2f(384, 300));
     play_button->SetText("Play");
     play_button->SetCallback([this]()
         {
@@ -17,7 +17,7 @@ MenuState::MenuState(StateStack& stack, Context context) : State(stack, context)
         });
 
     auto settings_button = std::make_shared<gui::Button>(*context.fonts, *context.textures);
-    settings_button->setPosition(sf::Vector2f(100, 300));
+    settings_button->setPosition(sf::Vector2f(384, 400));
     settings_button->SetText("Settings");
     settings_button->SetCallback([this]()
         {
@@ -25,7 +25,7 @@ MenuState::MenuState(StateStack& stack, Context context) : State(stack, context)
         });
 
     auto exit_button = std::make_shared<gui::Button>(*context.fonts, *context.textures);
-    exit_button->setPosition(sf::Vector2f(100, 350));
+    exit_button->setPosition(sf::Vector2f(384, 500));
     exit_button->SetText("Exit");
     exit_button->SetCallback([this]()
         {
