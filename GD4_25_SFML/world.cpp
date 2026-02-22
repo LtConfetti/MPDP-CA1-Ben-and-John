@@ -11,6 +11,7 @@
 #include "posteffect.hpp"
 
 //Ben Arrowsmith D00257746
+//John Nally D00258753
 
 World::World(sf::RenderWindow& window, SoundPlayer& sounds, FontHolder& font) //Ben Arrowsmith sound
 	: m_window(window)

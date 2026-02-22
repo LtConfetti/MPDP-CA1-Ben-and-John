@@ -3,7 +3,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 #include "SFML/Graphics/Vertex.hpp"
-
+//John Nally D00258753
 PostEffect::~PostEffect() = default;
 
 bool PostEffect::IsSupported()

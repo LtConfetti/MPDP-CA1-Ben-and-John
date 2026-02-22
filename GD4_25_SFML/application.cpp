@@ -8,7 +8,7 @@
 #include "settings_state.hpp"
 #include "game_over_state.hpp"
 #include "state.hpp"
-
+//John Nally D00258753
 Application::Application() : m_window(sf::VideoMode({ 1024, 768 }), "States", sf::Style::Close),
 m_player(new Player()),  //Ben Arrowsmith
 m_player2(new Player2()), //Ben Arrowsmith

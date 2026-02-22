@@ -3,6 +3,7 @@
 #include <iostream>
 
 //Ben Arrowsmith D00257746
+//John Nally D00258753
 GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.sounds, *context.fonts), m_player(*context.player), m_player2(*context.player2) //Ben Arrowsmith
 {
 

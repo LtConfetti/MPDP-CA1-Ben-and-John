@@ -7,6 +7,7 @@
 #include "command_queue.hpp"
 
 //Ben Arrowsmith D00257746
+//John Nally D00258753
 
 class Aircraft : public Entity
 {

@@ -11,7 +11,7 @@
 #include "bloom_effect.hpp"
 
 //Ben Arrowsmith D00257746
-
+//John Nally D00258753
 class World
 {
 public:

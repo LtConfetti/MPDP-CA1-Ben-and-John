@@ -1,7 +1,7 @@
 #include "game_over_state.hpp"
 #include "utility.hpp"
 #include "constants.hpp"
-
+//John Nally D00258753
 GameOverState::GameOverState(StateStack& stack, Context context)
     : State(stack, context)
     , m_game_over_text(context.fonts->Get(FontID::kMain))

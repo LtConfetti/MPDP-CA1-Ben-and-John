@@ -1,6 +1,6 @@
 #include "player.hpp"
 #include "aircraft.hpp"
-
+//John Nally D00258753
 struct AircraftMover
 {
     AircraftMover(float vx, float vy) : velocity(vx, vy) {}

@@ -1,5 +1,6 @@
 #pragma once
 //Ben Arrowsmith D00257746
+//John Nally D00258753
 enum class ReceiverCategories
 {
 	kNone = 0,

@@ -1,6 +1,6 @@
 #include "settings_state.hpp"
 #include "Utility.hpp"
-
+//John Nally D00258753
 SettingsState::SettingsState(StateStack& stack, Context context)
     : State(stack, context)
     , m_gui_container()

@@ -1,7 +1,7 @@
 #include "bloom_effect.hpp"
 #include "shader_types.hpp"
 #include <string>
-
+//John Nally D00258753
 BloomEffect::BloomEffect()
 {
 	m_shaders.Load(ShaderTypes::kBrightnessPass, "Media/Shaders/Fullpass.vert", "Media/Shaders/Brightness.frag");

@@ -7,7 +7,7 @@
 #include <SFML/Graphics/Shader.hpp>
 
 #include <array>
-
+//John Nally D00258753
 
 class BloomEffect : public PostEffect
 {
