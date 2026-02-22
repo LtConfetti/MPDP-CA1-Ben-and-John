@@ -466,7 +466,7 @@ void World::DestroyEntitiesOutsideView()
 }
 
 void World::UpdatePointBoxSpawning(sf::Time dt) { //Timer for boxes spawning
-	const sf::Time kSpawenInterval = sf::seconds(0.5f); //Spawn every X Seconds (3 ATM)
+	const sf::Time kSpawenInterval = sf::seconds(1.f); //Spawn every X Seconds (3 ATM)
 	m_pointbox_spawn_timer += dt;
 
 	if (m_pointbox_spawn_timer >= kSpawenInterval)

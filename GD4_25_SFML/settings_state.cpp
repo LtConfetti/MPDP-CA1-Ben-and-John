@@ -13,10 +13,10 @@ SettingsState::SettingsState(StateStack& stack, Context context)
     AddButtonLabel(Action::kBulletFire, 80.f, 350.f, "Fire", context);
     AddButtonLabel(Action::kMissileFire, 80.f, 400.f, "Missile Fire", context);
 
-    AddButtonLabel(Action::kMoveUp2, 320.f, 150.f, "Move Left", context);
+    AddButtonLabel(Action::kMoveUp2, 320.f, 150.f, "Move Up", context);
     AddButtonLabel(Action::kMoveDown2, 320.f, 200.f, "Move Down", context);
-    AddButtonLabel(Action::kMoveLeft2, 320.f, 300.f, "P2 Move Left", context);
     AddButtonLabel(Action::kMoveRight2, 320.f, 250.f, "Move Right", context);
+    AddButtonLabel(Action::kMoveLeft2, 320.f, 300.f, "P2 Move Left", context);
 	AddButtonLabel(Action::kBulletFire2, 320.f, 350.f, "P2 Fire", context);
 
     
