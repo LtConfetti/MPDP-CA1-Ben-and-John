@@ -13,6 +13,6 @@ public:
 private:
 	World m_world;
 	Player& m_player;
-	Player2& m_player2;
+	Player2& m_player2; //Ben Arrowsmith
 };
 

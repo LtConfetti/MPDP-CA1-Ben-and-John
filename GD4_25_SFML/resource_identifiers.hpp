@@ -8,11 +8,11 @@
 namespace sf
 {
 	class Texture;
-	class SoundBuffer;
+	class SoundBuffer; //Ben Arrowsmith
 }
 
 //template<typename Identifier, typename Resource>
 
 typedef ResourceHolder<TextureID, sf::Texture> TextureHolder;
 typedef ResourceHolder<FontID, sf::Font> FontHolder;
-typedef ResourceHolder<SoundEffect, sf::SoundBuffer> SoundBufferHolder;
+typedef ResourceHolder<SoundEffect, sf::SoundBuffer> SoundBufferHolder; //Ben Arrowsmith

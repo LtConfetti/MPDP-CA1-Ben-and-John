@@ -116,7 +116,7 @@ unsigned int Aircraft::GetCategory() const
 	{
 		return static_cast<unsigned int>(ReceiverCategories::kPlayerAircraft);
 	}
-	else if (IsPlayer2())
+	else if (IsPlayer2()) //Ben Arrowsmith
 	{
 		return static_cast<unsigned int>(ReceiverCategories::kPlayer2Aircraft);
 	}
@@ -272,7 +272,7 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	sf::Vector2f velocity(0, projectile->GetMaxSpeed());
 
 
-	float sign = (IsAllied() || IsPlayer2()) ? -1.f: 1.f;
+	float sign = (IsAllied() || IsPlayer2()) ? -1.f: 1.f; //Ben Arrowsmith
 
 	projectile->setPosition(GetWorldPosition() + offset * sign);
 	projectile->SetVelocity(velocity * sign);
@@ -313,7 +313,7 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 		CheckPickupDrop(commands);
 		m_is_marked_for_removal = true;
 
-		SoundEffect soundEffect = (Utility::RandomInt(2) == 0) ? SoundEffect::kExplosion1 : SoundEffect::kExplosion2;
+		SoundEffect soundEffect = (Utility::RandomInt(2) == 0) ? SoundEffect::kExplosion1 : SoundEffect::kExplosion2; //Ben Arrowsmith
 		PlayLocalSound(commands, soundEffect);
 		return;
 	}
@@ -332,7 +332,7 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
 
-	if (!IsAllied() && !IsPlayer2())
+	if (!IsAllied() && !IsPlayer2()) //Ben Arrowsmith
 	{
 		Fire();
 	}
@@ -342,7 +342,7 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 		commands.Push(m_fire_command);
 		m_fire_countdown += Table[static_cast<int>(m_type)].m_fire_interval / (m_fire_rate + 1.f);
 		m_is_firing = false;
-		PlayLocalSound(commands, IsAllied() or IsPlayer2() ? SoundEffect::kEnemyGunfire : SoundEffect::kAlliedGunfire);
+		PlayLocalSound(commands, IsAllied() or IsPlayer2() ? SoundEffect::kEnemyGunfire : SoundEffect::kAlliedGunfire); //Ben Arrowsmith
 
 	}
 	else if (m_fire_countdown > sf::Time::Zero)
@@ -354,7 +354,7 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 	//Missile launch
 	if (m_is_launching_missile)
 	{
-		PlayLocalSound(commands, SoundEffect::kLaunchMissile);
+		PlayLocalSound(commands, SoundEffect::kLaunchMissile); //Ben Arrowsmith
 		commands.Push(m_missile_command);
 		m_is_launching_missile = false;
 	}
@@ -365,7 +365,7 @@ bool Aircraft::IsAllied() const
 	return m_type == AircraftType::kEagle;
 }
 
-bool Aircraft::IsPlayer2() const
+bool Aircraft::IsPlayer2() const //Ben Arrowsmith
 {
 	return m_type == AircraftType::kEagle2;
 }
@@ -384,7 +384,7 @@ void Aircraft::CreatePickup(SceneNode& node, const TextureHolder& textures)
 }
 
 
-void Aircraft::PlayLocalSound(CommandQueue& commands, SoundEffect effect)
+void Aircraft::PlayLocalSound(CommandQueue& commands, SoundEffect effect) //Ben Arrowsmith
 {
 	sf::Vector2f world_position = GetWorldPosition();
 	std::printf("test 1");
@@ -400,7 +400,7 @@ void Aircraft::PlayLocalSound(CommandQueue& commands, SoundEffect effect)
 
 void Aircraft::CheckPickupDrop(CommandQueue& commands)
 {
-	if ((!IsAllied() || !IsPlayer2()) && Utility::RandomInt(kPickupDropChance) == 0 && !m_spawned_pickup)
+	if ((!IsAllied() || !IsPlayer2()) && Utility::RandomInt(kPickupDropChance) == 0 && !m_spawned_pickup) //Ben Arrowsmith
 	{
 		commands.Push(m_drop_pickup_command);
 	}

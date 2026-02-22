@@ -2,7 +2,7 @@
 #include "mission_status.hpp"
 #include <iostream>
 
-GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.sounds, *context.fonts), m_player(*context.player), m_player2(*context.player2)
+GameState::GameState(StateStack& stack, Context context) : State(stack, context), m_world(*context.window, *context.sounds, *context.fonts), m_player(*context.player), m_player2(*context.player2) //Ben Arrowsmith
 {
 
 }
@@ -43,7 +43,7 @@ bool GameState::Update(sf::Time dt)
 
 	CommandQueue& commands = m_world.GetCommandQueue();
 	m_player.HandleRealTimeInput(commands);
-	m_player2.HandleRealTimeInput(commands);
+	m_player2.HandleRealTimeInput(commands); //Ben Arrowsmith
 	return true;
 }
 
@@ -51,7 +51,7 @@ bool GameState::HandleEvent(const sf::Event& event)
 {
 	CommandQueue& commands = m_world.GetCommandQueue();
 	m_player.HandleEvent(event, commands);
-	m_player2.HandleEvent(event, commands);
+	m_player2.HandleEvent(event, commands); //Ben Arrowsmith
 
 	//Escape should bring up the pause menu
 	const auto* keypress = event.getIf<sf::Event::KeyPressed>();

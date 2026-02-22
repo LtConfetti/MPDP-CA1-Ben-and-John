@@ -3,7 +3,7 @@ enum class TextureID
 {
 	kLandscape,
 	kEagle,
-	kEagle2,
+	kEagle2, //Ben Arrowsmith
 	kPlayer1Walk1, //Walk animation frames for player 1 a
 	kPlayer1Walk2,
 	kPlayer2Walk1, //Walk animation frames for player 1

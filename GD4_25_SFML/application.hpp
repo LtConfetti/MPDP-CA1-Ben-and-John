@@ -21,8 +21,8 @@ private:
 private:
 	sf::RenderWindow m_window;
 	Player* m_player;
-	Player2* m_player2;
-	SoundPlayer m_sound;	
+	Player2* m_player2;		//Ben Arrowsmith
+	SoundPlayer m_sound;	//Ben Arrowsmith
 
 	TextureHolder m_textures;
 	FontHolder m_fonts;

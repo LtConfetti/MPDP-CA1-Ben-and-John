@@ -2,10 +2,10 @@
 #include <memory>
 #include "resource_identifiers.hpp"
 #include "player.hpp"
-#include "player2.hpp"
+#include "player2.hpp" //Ben Arrowsmith
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "stateid.hpp"
-#include "sound_player.hpp"
+#include "sound_player.hpp" //Ben Arrowsmith
 
 
 class StateStack;
@@ -17,16 +17,16 @@ public:
 	typedef std::unique_ptr<State> Ptr;
 
 	struct Context
-	{
-		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player, Player2& player2, SoundPlayer& sound);
+	{ 
+		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player, Player2& player2, SoundPlayer& sound); //Ben Arrowsmith
 
 		//TODO unique_ptr rather than raw pointers here?
 		sf::RenderWindow* window;
 		TextureHolder* textures;
 		FontHolder* fonts;
 		Player* player;
-		Player2* player2;
-		SoundPlayer* sounds;
+		Player2* player2; //Ben Arrowsmith
+		SoundPlayer* sounds; //Ben Arrowsmith
 
 	};
 

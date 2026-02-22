@@ -2,6 +2,8 @@
 #include "scene_node.hpp"
 #include "sound_player.hpp"
 
+//Ben Arrowsmith
+//Created Entire header from Johns code
 
 class SoundNode : public SceneNode
 {

@@ -10,7 +10,10 @@
 #include "utility.hpp"
 #include "sound_node.hpp"
 
-World::World(sf::RenderWindow& window, SoundPlayer& sounds, FontHolder& font)
+//Ben Arrowsmith
+
+
+World::World(sf::RenderWindow& window, SoundPlayer& sounds, FontHolder& font) //Ben Arrowsmith sound
 	: m_window(window)
 	, m_camera(window.getDefaultView())
 	, m_textures()
@@ -23,7 +26,7 @@ World::World(sf::RenderWindow& window, SoundPlayer& sounds, FontHolder& font)
 	, m_spawn_position2(m_camera.getSize().x / 2.f + 100.f, m_world_bounds.size.y - m_camera.getSize().y / 2.f)
 	//, m_scroll_speed(-100.f)
 	, m_player_aircraft()
-	, m_player_aircraft2()
+	, m_player_aircraft2() //Ben Arrowsmith
 	, m_pointbox_spawn_timer(sf::Time::Zero) //Timer
 	, m_player1_score(0) //Player 1 Score Count
 	, m_player2_score(0) //Player 2 score
@@ -41,12 +44,12 @@ void World::Update(sf::Time dt)
 
 
 	m_player_aircraft->SetVelocity(0.f, 0.f);
-	m_player_aircraft2->SetVelocity(0.f, 0.f);
+	m_player_aircraft2->SetVelocity(0.f, 0.f); //Ben Arrowsmith
 
 	DestroyEntitiesOutsideView();
 	GuideMissiles();
 
-	UpdateSounds();
+	UpdateSounds(); //Ben Arrowsmith
 
 	//Process commands from the scenegraph
 	while (!m_command_queue.IsEmpty())
@@ -92,7 +95,7 @@ bool World::HasPlayerReachedEnd() const
 void World::LoadTextures()
 {
 	m_textures.Load(TextureID::kEagle, "Media/Textures/Player1.png");
-	m_textures.Load(TextureID::kEagle2, "Media/Textures/Player2.png");
+	m_textures.Load(TextureID::kEagle2, "Media/Textures/Player2.png"); //Ben Arrowsmith
 	m_textures.Load(TextureID::kRaptor, "Media/Textures/Raptor.png");
 	m_textures.Load(TextureID::kLandscape, "Media/Textures/Desert.png");
 	m_textures.Load(TextureID::kBullet, "Media/Textures/Bullet.png");
@@ -154,7 +157,7 @@ void World::BuildScene()
 	std::unique_ptr<SoundNode> soundNode(new SoundNode(m_sounds));
 	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(soundNode));
 	
-	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftType::kEagle2, m_textures, m_fonts));
+	std::unique_ptr<Aircraft> player2(new Aircraft(AircraftType::kEagle2, m_textures, m_fonts));  //Ben Arrowsmith
 	m_player_aircraft2 = player2.get();
 	m_player_aircraft2->setPosition(m_spawn_position2);
 	m_player_aircraft2->SetVelocity(40.f, m_scroll_speed);
@@ -162,22 +165,12 @@ void World::BuildScene()
 	std::cout << "Player 2 spawn position: " << m_spawn_position2.x << ", " << m_spawn_position2.y << std::endl;
 	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(player2));
 
-	//left_escort->setPosition(sf::Vector2f(- 80.f, 50.f));
-	//m_player_aircraft2 = left_escort.get();
-	////m_player_aircraft->AttachChild(std::move(left_escort));
-	//m_player_aircraft2->SetVelocity(40.f, m_scroll_speed);
-	
-
-	/*std::unique_ptr<Aircraft> right_escort(new Aircraft(AircraftType::kRaptor, m_textures, m_fonts));
-	right_escort->setPosition(sf::Vector2f(80.f, 50.f));
-	m_player_aircraft->AttachChild(std::move(right_escort));*/
-
 }
 
 void World::AdaptPlayerVelocity()
 {
 	sf::Vector2f velocity = m_player_aircraft->GetVelocity();
-	sf::Vector2f velocity2 = m_player_aircraft2->GetVelocity();
+	sf::Vector2f velocity2 = m_player_aircraft2->GetVelocity(); //Ben Arrowsmith
 
 
 	//If they are moving diagonally divide by sqrt 2
@@ -186,7 +179,7 @@ void World::AdaptPlayerVelocity()
 		m_player_aircraft->SetVelocity(velocity / std::sqrt(2.f));
 		
 	}
-	if (velocity2.x != 0.f && velocity2.y != 0.f)
+	if (velocity2.x != 0.f && velocity2.y != 0.f) //Ben Arrowsmith
 	{
 		m_player_aircraft2->SetVelocity(velocity2 / std::sqrt(2.f));
 
@@ -207,7 +200,7 @@ void World::AdaptPlayerPosition()
 	position.y = std::max(position.y, view_bounds.position.y + border_distance);
 	m_player_aircraft->setPosition(position);
 
-	sf::Vector2f position2 = m_player_aircraft2->getPosition();
+	sf::Vector2f position2 = m_player_aircraft2->getPosition(); //Ben Arrowsmith
 	position2.x = std::min(position2.x, view_bounds.size.x - border_distance);
 	position2.x = std::max(position2.x, border_distance);
 	position2.y = std::min(position2.y, view_bounds.position.y + view_bounds.size.y - border_distance);
@@ -510,7 +503,7 @@ bool World::HasPlayerReachedPoints() const{
 }
 
 
-void World::UpdateSounds()
+void World::UpdateSounds() //Ben Arrowsmith
 {
 	sf::Vector2f listener_position;
 

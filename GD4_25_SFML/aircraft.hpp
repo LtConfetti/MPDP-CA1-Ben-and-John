@@ -30,7 +30,7 @@ public:
 	sf::FloatRect GetBoundingRect() const override;
 	bool IsMarkedForRemoval() const override;
 
-	void PlayLocalSound(CommandQueue& commands, SoundEffect effect);
+	void PlayLocalSound(CommandQueue& commands, SoundEffect effect); //Ben Arrowsmith
 
 
 private:
@@ -39,7 +39,7 @@ private:
 
 	void CheckProjectileLaunch(sf::Time dt, CommandQueue& commands);
 	bool IsAllied() const;
-	bool IsPlayer2() const;
+	bool IsPlayer2() const; //Ben Arrowsmith
 	void CreatePickup(SceneNode& node, const TextureHolder& textures);
 	void CheckPickupDrop(CommandQueue& commands);
 

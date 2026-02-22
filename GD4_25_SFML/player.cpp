@@ -29,24 +29,6 @@ Player::Player()
     }
 }
 
-
-//Player::Player()
-//{
-//    m_key_binding[sf::Keyboard::Scancode::L] = Action::kMoveLeft;
-//    m_key_binding[sf::Keyboard::Scancode::J] = Action::kMoveRight;
-//    m_key_binding[sf::Keyboard::Scancode::I] = Action::kMoveUp;
-//    m_key_binding[sf::Keyboard::Scancode::K] = Action::kMoveDown;
-//    m_key_binding[sf::Keyboard::Scancode::N] = Action::kBulletFire;
-//    m_key_binding[sf::Keyboard::Scancode::B] = Action::kMissileFire;
-//
-//    InitialiseActions();
-//
-//    for (auto& pair : m_action_binding)
-//    {
-//        pair.second.category = static_cast<unsigned int>(ReceiverCategories::kPlayerAircraft);
-//    }
-//}
-
 void Player::HandleEvent(const sf::Event& event, CommandQueue& command_queue)
 {
     const auto* key_pressed = event.getIf<sf::Event::KeyPressed>();

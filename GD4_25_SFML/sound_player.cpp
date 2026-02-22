@@ -6,6 +6,8 @@
 
 #include <cmath>
 
+//Ben Arrowsmith
+//Created Entire class from Johns code
 
 namespace
 {

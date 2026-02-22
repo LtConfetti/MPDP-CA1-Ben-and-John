@@ -1,5 +1,8 @@
 #include "sound_node.hpp"
 
+//Ben Arrowsmith
+//Created Entire class from Johns code
+
 SoundNode::SoundNode(SoundPlayer& player)
     : m_sounds(player)
 {
