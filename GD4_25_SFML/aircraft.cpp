@@ -93,6 +93,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 		std::string* score = new std::string("");
 		std::unique_ptr<TextNode> score_display(new TextNode(fonts, *score));
 		m_score_display = score_display.get();
+		m_score_display->SetColor(sf::Color::Red); // Set score color to red for player 1
 		AttachChild(std::move(score_display));
 	}
 	else if (Aircraft::GetCategory() == static_cast<int>(ReceiverCategories::kPlayer2Aircraft))
@@ -105,6 +106,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 		std::string* score = new std::string("");
 		std::unique_ptr<TextNode> score_display(new TextNode(fonts, *score));
 		m_score_display = score_display.get();
+		m_score_display->SetColor(sf::Color(0, 100, 0)); // Set score color to red for player 1
 		AttachChild(std::move(score_display));
 	}
 	UpdateTexts();

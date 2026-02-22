@@ -16,3 +16,10 @@ void TextNode::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) co
 {
 	target.draw(m_text, states);
 }
+
+void TextNode::SetColor(sf::Color color)
+{
+	m_text.setFillColor(color);
+}
+
+

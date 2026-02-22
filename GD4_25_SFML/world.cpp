@@ -108,7 +108,7 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kEagle, "Media/Textures/Player1.png");
 	m_textures.Load(TextureID::kEagle2, "Media/Textures/Player2.png");
 	m_textures.Load(TextureID::kRaptor, "Media/Textures/Raptor.png");
-	m_textures.Load(TextureID::kLandscape, "Media/Textures/Desert.png");
+	m_textures.Load(TextureID::kLandscape, "Media/Textures/background.png");
 	m_textures.Load(TextureID::kBullet, "Media/Textures/Bullet.png");
 	m_textures.Load(TextureID::kMissile, "Media/Textures/Missile.png");
 
@@ -440,7 +440,7 @@ void World::HandleCollisions()
 			int points = pointbox.GetPointValue();
 			m_player2_score += points;
 			player.AddScore(points);
-
+			player.PlayLocalSound(m_command_queue, SoundEffect::kCollectPickup);
 			std::cout << "current player 2 score: " << m_player2_score << std::endl;
 
 			pointbox.Destroy();
