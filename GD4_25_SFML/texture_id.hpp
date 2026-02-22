@@ -24,4 +24,6 @@ enum class TextureID
 	kPointBoxPlusOne,
 	kPointBoxPlusTwo,
 	kPointBoxPlusThree,
+	kPointBoxMinusFive,
+
 };

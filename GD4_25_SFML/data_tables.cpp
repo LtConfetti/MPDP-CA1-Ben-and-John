@@ -95,5 +95,12 @@ std::vector<PointBoxData> InitializePointBoxData()
 	data[static_cast<int>(PointBoxType::kPlusThree)].m_directions.emplace_back(Direction(-30.f, 100.f));
 	data[static_cast<int>(PointBoxType::kPlusThree)].m_directions.emplace_back(Direction(+30.f, 50.f));
 
+	data[static_cast<int>(PointBoxType::kMinusFive)].m_point_value = -5;
+	data[static_cast<int>(PointBoxType::kMinusFive)].m_speed = 150.f;
+	data[static_cast<int>(PointBoxType::kMinusFive)].m_texture = TextureID::kPointBoxMinusFive;
+	data[static_cast<int>(PointBoxType::kMinusFive)].m_directions.emplace_back(Direction(0.f, 0.f));
+	data[static_cast<int>(PointBoxType::kMinusFive)].m_directions.emplace_back(Direction(0.f, 0.f));
+	data[static_cast<int>(PointBoxType::kMinusFive)].m_directions.emplace_back(Direction(0.f, 0.f));
+
 	return data;
 }

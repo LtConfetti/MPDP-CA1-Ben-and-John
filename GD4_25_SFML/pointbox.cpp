@@ -21,7 +21,11 @@ TextureID ToTextureID(PointBoxType type)
 	case PointBoxType::kPlusThree:
 		return TextureID::kPointBoxPlusThree;
 		break;
+	case PointBoxType::kMinusFive:
+		return TextureID::kPointBoxMinusFive;
+		break;
 	}
+
 	return TextureID::kPointBoxPlusOne;
 }
 
@@ -40,6 +44,10 @@ PointBox::PointBox(PointBoxType type, const TextureHolder& textures, const FontH
 	m_point_display = point_display.get();
 	m_point_display->setPosition(sf::Vector2f(0.f, 0.f));
 	AttachChild(std::move(point_display));
+	if (GetPointValue() < 0) {
+		m_point_display->SetString(std::to_string(GetPointValue()));
+		m_point_display->SetColor(sf::Color::Red);
+	}
 
 	UpdateTexts();
 }

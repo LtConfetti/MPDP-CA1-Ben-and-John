@@ -121,6 +121,7 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kPointBoxPlusOne, "Media/Textures/box_plus_one.png");
 	m_textures.Load(TextureID::kPointBoxPlusTwo, "Media/Textures/box_plus_two.png");
 	m_textures.Load(TextureID::kPointBoxPlusThree, "Media/Textures/box_plus_three.png");
+	m_textures.Load(TextureID::kPointBoxMinusFive, "Media/Textures/box_minus_five.png");
 
 	m_textures.Load(TextureID::kPlayer1Walk1, "Media/Textures/Player1_Walk1.png");
 	m_textures.Load(TextureID::kPlayer1Walk2, "Media/Textures/Player1_Walk2.png");
