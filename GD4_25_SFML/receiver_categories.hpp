@@ -1,4 +1,5 @@
 #pragma once
+//Ben Arrowsmith D00257746
 enum class ReceiverCategories
 {
 	kNone = 0,
@@ -9,7 +10,7 @@ enum class ReceiverCategories
 	kAlliedProjectile = 1 << 4,
 	kEnemyProjectile = 1 << 5,
 	kPickup = 1 << 6,
-	kPlayer2Aircraft = 1 << 7,
+	kPlayer2Aircraft = 1 << 7, //Ben Arrowsmith
 	kPointBox = 1 << 8,
 	kSoundEffect = 1 << 9,
 

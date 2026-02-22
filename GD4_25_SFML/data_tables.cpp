@@ -6,6 +6,8 @@
 #include "constants.hpp"
 #include "pointbox_type.hpp"
 
+//Ben Arrowsmith D00257746
+
 std::vector<AircraftData> InitializeAircraftData()
 {
 	std::vector<AircraftData> data(static_cast<int>(AircraftType::kAircraftCount));

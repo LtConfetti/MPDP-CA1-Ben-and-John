@@ -10,8 +10,7 @@
 #include "utility.hpp"
 #include "sound_node.hpp"
 
-//Ben Arrowsmith
-
+//Ben Arrowsmith D00257746
 
 World::World(sf::RenderWindow& window, SoundPlayer& sounds, FontHolder& font) //Ben Arrowsmith sound
 	: m_window(window)

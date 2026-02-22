@@ -6,8 +6,7 @@
 #include "command.hpp"
 #include "mission_status.hpp"
 
-//Ben Arrowsmith
-
+//Ben Arrowsmith D00257746
 class Player2
 {
 public:

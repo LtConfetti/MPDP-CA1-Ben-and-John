@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-//Ben Arrowsmith
+//Ben Arrowsmith D00257746
 //Created Entire class from Johns code
 
 namespace
