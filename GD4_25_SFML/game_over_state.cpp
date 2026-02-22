@@ -9,6 +9,7 @@ GameOverState::GameOverState(StateStack& stack, Context context)
 	, m_winner_text(context.fonts->Get(FontID::kMain))
 	, m_is_win(false)
 {
+    //John Nally: Game condition if Player 1 wins
     sf::Vector2f window_size(context.window->getSize());
     if (context.player->GetMissionStatus() == MissionStatus::kPlayer1Wins) {
         m_game_over_text.setString("Apple Jacks Wins!");
@@ -18,6 +19,7 @@ GameOverState::GameOverState(StateStack& stack, Context context)
         m_game_over_text.setPosition(sf::Vector2f(0.5 * window_size.x, 0.4 * window_size.y));
 		m_is_win = true;
     }
+	//John Nally: Game condition if Player 2 wins
     else if (context.player->GetMissionStatus() == MissionStatus::kPlayer2Wins) {
         m_game_over_text.setString("Jack's Apples Wins!");
         m_game_over_text.setCharacterSize(50);
@@ -28,6 +30,7 @@ GameOverState::GameOverState(StateStack& stack, Context context)
     }
     else if (context.player->GetMissionStatus() == MissionStatus::kMissionSuccess)
     {
+        //John Nally: Any other state, incase smthn goes wrong
         m_game_over_text.setString("Mission Success");
     }
     else

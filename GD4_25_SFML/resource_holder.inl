@@ -3,6 +3,7 @@
 #include "resource_holder.hpp"
 #include <string>
 #include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Shader.hpp>
 #include <iostream>
 
 template<typename Identifier, typename Resource>

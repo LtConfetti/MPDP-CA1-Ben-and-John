@@ -15,18 +15,8 @@ void GameState::Draw()
 bool GameState::Update(sf::Time dt)
 {
 	m_world.Update(dt);
-
-	if (!m_world.HasAlivePlayer())
-	{
-		m_player.SetMissionStatus(MissionStatus::kMissionFailure);
-		RequestStackPush(StateID::kGameOver);
-	}
-	else if (m_world.HasPlayerReachedEnd())
-	{
-		m_player.SetMissionStatus(MissionStatus::kMissionSuccess);
-		RequestStackPush(StateID::kGameOver);
-	}
-	else if (m_world.HasPlayerReachedPoints()) {
+	//John Nally: Check for win condition based on whos win state is active, then pushes gameover state
+	if (m_world.HasPlayerReachedPoints()) {
 		int winner = m_world.GetWinningPlayer();
 
 		if (winner == 1) {
@@ -53,6 +43,7 @@ bool GameState::HandleEvent(const sf::Event& event)
 	m_player.HandleEvent(event, commands);
 	m_player2.HandleEvent(event, commands); //Ben Arrowsmith
 
+	//Escape should bring up the pause menu
 	//Escape should bring up the pause menu
 	const auto* keypress = event.getIf<sf::Event::KeyPressed>();
 	if(keypress && keypress->scancode == sf::Keyboard::Scancode::Escape)
