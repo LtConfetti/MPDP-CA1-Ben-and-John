@@ -14,6 +14,5 @@ enum class Action
 	kMoveDown2,//Ben Arrowsmith
 	kBulletFire2,
 	kBulletFire,
-	kMissileFire,
 	kActionCount
 };

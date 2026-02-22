@@ -6,18 +6,18 @@ SettingsState::SettingsState(StateStack& stack, Context context)
     , m_gui_container()
     , m_background_sprite(context.textures->Get(TextureID::kTitleScreen))
 {
-    AddButtonLabel(Action::kMoveUp, 80.f, 150.f, "Move Up", context);
-    AddButtonLabel(Action::kMoveDown, 80.f, 200.f, "Move Down", context);
-    AddButtonLabel(Action::kMoveRight, 80.f, 250.f, "Move Right", context);
-    AddButtonLabel(Action::kMoveLeft, 80.f, 300.f, "Move Left", context);
-    AddButtonLabel(Action::kBulletFire, 80.f, 350.f, "Fire", context);
-    AddButtonLabel(Action::kMissileFire, 80.f, 400.f, "Missile Fire", context);
+    AddButtonLabel(Action::kMoveUp, 80.f, 150.f, "P1 Move Up", context);
+    AddButtonLabel(Action::kMoveDown, 80.f, 200.f, "P1 Move Down", context);
+    AddButtonLabel(Action::kMoveRight, 80.f, 250.f, "P1 Move Right", context);
+    AddButtonLabel(Action::kMoveLeft, 80.f, 300.f, "P1 Move Left", context);
+    AddButtonLabel(Action::kBulletFire, 80.f, 350.f, "P1 Fire", context);
 
-    AddButtonLabel(Action::kMoveUp2, 320.f, 150.f, "Move Left", context);
-    AddButtonLabel(Action::kMoveDown2, 320.f, 200.f, "Move Down", context);
-    AddButtonLabel(Action::kMoveLeft2, 320.f, 300.f, "P2 Move Left", context);
-    AddButtonLabel(Action::kMoveRight2, 320.f, 250.f, "Move Right", context);
-	AddButtonLabel(Action::kBulletFire2, 320.f, 350.f, "P2 Fire", context);
+	//John Nally: Added button labels for Player 2 key bindings
+    AddButtonLabel(Action::kMoveUp2, 500.f, 150.f, "P2 Move Up", context);
+    AddButtonLabel(Action::kMoveDown2, 500.f, 200.f, "P2 Move Down", context);
+    AddButtonLabel(Action::kMoveRight2, 500.f, 250.f, "P2 Move Right", context);
+    AddButtonLabel(Action::kMoveLeft2, 500.f, 300.f, "P2 Move Left", context);
+	AddButtonLabel(Action::kBulletFire2, 500.f, 350.f, "P2 Fire", context);
 
     
 
@@ -46,6 +46,7 @@ bool SettingsState::HandleEvent(const sf::Event& event)
 {
     bool is_key_binding = false;
 
+    //Iterate through all of the key binding buttons to see if they are being pressed, waiting for input from the user
     //Iterate through all of the key binding buttons to see if they are being pressed, waiting for input from the user
     for (std::size_t action = 0; action < static_cast<int>(Action::kActionCount); ++action)
     {
@@ -82,7 +83,7 @@ void SettingsState::UpdateLabels()
         m_binding_labels[i]->SetText(Utility::toString(key));
     }
 }
-
+//John Nally: Added x coordinate for buttons so player 2 buttons wouldnt be ontop of player 1
 void SettingsState::AddButtonLabel(Action action, float x, float y, const std::string& text, Context context)
 {
     m_binding_buttons[static_cast<int>(action)] = std::make_shared<gui::Button>(*context.fonts, *context.textures);

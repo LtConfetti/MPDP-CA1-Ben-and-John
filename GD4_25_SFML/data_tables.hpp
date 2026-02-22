@@ -29,14 +29,9 @@ struct ProjectileData
 	TextureID m_texture;
 };
 
-struct PickupData
-{
-	std::function<void(Aircraft&)> m_action;
-	TextureID m_texture;
-};
-
 struct PointBoxData
 {
+	//John Nally: struct for Pointboxes, holds speed, point value (+/-), texture and movement pattern (directions)
 	int m_point_value;
 	float m_speed;
 	TextureID m_texture;
@@ -45,6 +40,5 @@ struct PointBoxData
 
 std::vector<AircraftData> InitializeAircraftData();
 std::vector<ProjectileData> InitializeProjectileData();
-std::vector<PickupData> InitializePickupData();
 std::vector<PointBoxData> InitializePointBoxData();
 
