@@ -19,11 +19,11 @@ public:
 
 	CommandQueue& GetCommandQueue();
 
-	bool HasPlayerReachedPoints() const; //New Win Condition for Points
+	bool HasPlayerReachedPoints() const; //John Nally: New Win Condition for Points
 
-	int GetPlayer1Score() const; //Player1 Get Points
-	int GetPlayer2Score() const; //Player 2 Get Points
-	int GetWinningPlayer() const; //Winner for GameState
+	int GetPlayer1Score() const; //John Nally: Player1 Get Points
+	int GetPlayer2Score() const; //John Nally: Player 2 Get Points
+	int GetWinningPlayer() const; //John Nally: Winner for GameState
 
 private:
 	void LoadTextures();

@@ -12,6 +12,7 @@
 class BloomEffect : public PostEffect
 {
 public:
+	//Whole File was imported by John Nally from a John Loanne repository
 	BloomEffect();
 
 	virtual void Apply(const sf::RenderTexture& input, sf::RenderTarget& output);

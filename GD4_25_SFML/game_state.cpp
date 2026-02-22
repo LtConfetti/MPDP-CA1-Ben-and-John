@@ -15,7 +15,7 @@ void GameState::Draw()
 bool GameState::Update(sf::Time dt)
 {
 	m_world.Update(dt);
-
+	//John Nally: Check for win condition based on whos win state is active, then pushes gameover state
 	if (m_world.HasPlayerReachedPoints()) {
 		int winner = m_world.GetWinningPlayer();
 

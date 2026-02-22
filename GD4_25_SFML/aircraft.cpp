@@ -221,6 +221,7 @@ int Aircraft::GetScore() {
 }
 
 void Aircraft::UpdateAnimation(sf::Time dt) {
+	//John Nally: this function updates animation based on velocity, if moving, it cycles through 2 frames, else it goes to an idle frame
 	//AI WAS USED IN THE CREATION OF THIS FUNCTION
 	sf::Vector2f vel = GetVelocity();
 	bool isMoving = (vel.x != 0.f || vel.y != 0.f);

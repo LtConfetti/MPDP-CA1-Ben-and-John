@@ -23,9 +23,9 @@ World::World(sf::RenderWindow& window, SoundPlayer& sounds, FontHolder& font)
 	, m_spawn_position2(m_camera.getSize().x / 2.f + 100.f, m_world_bounds.size.y - m_camera.getSize().y / 2.f)
 	, m_player_aircraft()
 	, m_player_aircraft2()
-	, m_pointbox_spawn_timer(sf::Time::Zero) //Timer
-	, m_player1_score(0) //Player 1 Score Count
-	, m_player2_score(0) //Player 2 score
+	, m_pointbox_spawn_timer(sf::Time::Zero) //John Nally: Timer between boxes spawning
+	, m_player1_score(0) //John Nally: Player 1 Score Count
+	, m_player2_score(0) //John Nally: Player 2 score
 
 {
 	LoadTextures();
@@ -93,11 +93,13 @@ void World::LoadTextures()
 	m_textures.Load(TextureID::kLandscape, "Media/Textures/background.png");
 	m_textures.Load(TextureID::kBullet, "Media/Textures/Bullet.png");
 
+	//John Nally: Box Textures for Point Boxes
 	m_textures.Load(TextureID::kPointBoxPlusOne, "Media/Textures/box_plus_one.png");
 	m_textures.Load(TextureID::kPointBoxPlusTwo, "Media/Textures/box_plus_two.png");
 	m_textures.Load(TextureID::kPointBoxPlusThree, "Media/Textures/box_plus_three.png");
 	m_textures.Load(TextureID::kPointBoxMinusFive, "Media/Textures/box_minus_five.png");
 
+	//John Nally: Load the walk animation frames for both players
 	m_textures.Load(TextureID::kPlayer1Walk1, "Media/Textures/Player1_Walk1.png");
 	m_textures.Load(TextureID::kPlayer1Walk2, "Media/Textures/Player1_Walk2.png");
 	m_textures.Load(TextureID::kPlayer2Walk1, "Media/Textures/Player2_Walk1.png");
@@ -226,11 +228,9 @@ void World::HandleCollisions()
 	{
 		if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kEnemyProjectile))
 		{
-			//WHEN PLAYER 1 SHOT, REMOVES 1 SCORE FROM PLAYER 1
+			//John Nally: WHEN PLAYER 1 SHOT, REMOVES 1 SCORE FROM PLAYER 1
 			auto& aircraft = static_cast<Aircraft&>(*pair.first);
 			auto& projectile = static_cast<Projectile&>(*pair.second);
-			//Collision response
-			std::cout << "Collision: Player1 vs EnemyProjectile" << std::endl;
 
 			aircraft.AddScore(-1);
 			m_player1_score -= 1;
@@ -238,18 +238,16 @@ void World::HandleCollisions()
 		}
 		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kAlliedProjectile))
 		{
-			//WHEN PLAYER 2 SHOT, REMOVES 1 SCORE FROM PLAYER 1
+			//John Nally: WHEN PLAYER 2 SHOT, REMOVES 1 SCORE FROM PLAYER 1
 			auto& aircraft = static_cast<Aircraft&>(*pair.first);
 			auto& projectile = static_cast<Projectile&>(*pair.second);
-			//Collision response
-			std::cout << "Collision: Player2 vs AlliedProjectile" << std::endl;
 
 			aircraft.AddScore(-1);
 			m_player2_score -= 1;
 			projectile.Destroy();
 		}
 		else if (MatchesCategories(pair, ReceiverCategories::kPlayerAircraft, ReceiverCategories::kPointBox)) {
-			//PLAYER 1 COLLISION W/ POINTBOXES
+			//John Nally: PLAYER 1 COLLISION W/ POINTBOXES
 			auto& player = static_cast<Aircraft&>(*pair.first);
 			auto& pointbox = static_cast<PointBox&>(*pair.second);
 
@@ -258,12 +256,10 @@ void World::HandleCollisions()
 			player.AddScore(points);
 			player.PlayLocalSound(m_command_queue, SoundEffect::kCollectPickup);
 
-			std::cout << "current player 1 score: " << m_player1_score << std::endl;
-
 			pointbox.Destroy();
 		}
 		else if (MatchesCategories(pair, ReceiverCategories::kPlayer2Aircraft, ReceiverCategories::kPointBox)) { 
-			//PLAYER 2 COLLISION W/ POINTBOXES
+			//John Nally: PLAYER 2 COLLISION W/ POINTBOXES
 			auto& player = static_cast<Aircraft&>(*pair.first);
 			auto& pointbox = static_cast<PointBox&>(*pair.second);
 
@@ -271,7 +267,6 @@ void World::HandleCollisions()
 			m_player2_score += points;
 			player.AddScore(points);
 			player.PlayLocalSound(m_command_queue, SoundEffect::kCollectPickup);
-			std::cout << "current player 2 score: " << m_player2_score << std::endl;
 
 			pointbox.Destroy();
 		}
@@ -293,17 +288,18 @@ void World::DestroyEntitiesOutsideView()
 	m_command_queue.Push(command);
 }
 
-void World::UpdatePointBoxSpawning(sf::Time dt) { //Timer for boxes spawning
+void World::UpdatePointBoxSpawning(sf::Time dt) { //John Nally: Timer for boxes spawning
 	const sf::Time kSpawnInterval = sf::seconds(1.f); //Spawn every X Seconds (3 ATM)
 	m_pointbox_spawn_timer += dt;
 
 	if (m_pointbox_spawn_timer >= kSpawnInterval)
 	{
 		SpawnPointBoxes();
-		m_pointbox_spawn_timer = sf::Time::Zero; //Timer reset after summon
+		m_pointbox_spawn_timer = sf::Time::Zero; //John Nally: Timer reset after summon
 	}
 }
 
+//John Nally: Spawns a point box at a random X position within the view bounds, just above the top of the screen. The type of point box is also randomly selected.
 void World::SpawnPointBoxes() {
 	int random_type = Utility::RandomInt(static_cast<int>(PointBoxType::kPointBoxCount));
 	PointBoxType type = static_cast<PointBoxType>(random_type);
@@ -323,17 +319,18 @@ void World::SpawnPointBoxes() {
 
 	m_scene_layers[static_cast<int>(SceneLayers::kAir)]->AttachChild(std::move(box));
 
-	std::cout << "X Spawn: " << spawn_x << " Y Spawn: " << spawn_y << std::endl;
+	//std::cout << "X Spawn: " << spawn_x << " Y Spawn: " << spawn_y << std::endl;
 }
-
+//John Nally: Getters for player scores to be used in GameState for UI display
 int World::GetPlayer1Score() const {
 	return m_player1_score;
 }
-
+//John Nally: Getters for player scores to be used in GameState for UI display
 int World::GetPlayer2Score() const {
 	return m_player2_score;
 }
 
+//John Nally: Compares the scores of both players and returns the winning player (1 or 2), or 0 if it's a tie or any other state
 int World::GetWinningPlayer() const {
 	if (m_player1_score > m_player2_score) {
 		return 1; // Player 1 wins
@@ -345,7 +342,7 @@ int World::GetWinningPlayer() const {
 		return 0; // Any other state or smthn IG
 	}
 }
-
+//John Nally: Checks if either player has reached the score threshold to win the game (30 points in this case)
 bool World::HasPlayerReachedPoints() const {
 	return m_player_aircraft->GetScore() >= 30 || m_player_aircraft2->GetScore() >= 30;
 }

@@ -43,9 +43,9 @@ private:
 	sf::Sprite m_sprite;
 
 	TextNode* m_health_display;
-	TextNode* m_score_display; //For Player UI to show score
+	TextNode* m_score_display; //John Nally: For Player UI to show score
 
-	int m_current_score; //current score saved
+	int m_current_score; //John Nally: current score saved
 
 	Command m_fire_command;
 
@@ -57,9 +57,9 @@ private:
 
 	bool m_is_marked_for_removal;
 
-	const TextureHolder& m_textures; //reference for swapping between frames
+	const TextureHolder& m_textures; //John Nally: reference for swapping between frames
 	sf::Time m_anim_timer;
-	int m_anime_frame; //current animation frame
-	static constexpr float kFrameTime = 0.2f; //Time for each animation frame
+	int m_anime_frame; //John Nally:  current animation frame
+	static constexpr float kFrameTime = 0.2f; //John Nally:  Time for each animation frame
 
 };

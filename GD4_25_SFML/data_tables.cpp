@@ -39,6 +39,7 @@ std::vector<ProjectileData> InitializeProjectileData()
 
 std::vector<PointBoxData> InitializePointBoxData()
 {
+	//John Nally:  Initalize PointBot structs with movement, point value and speeds given
 	std::vector<PointBoxData> data(static_cast<int>(PointBoxType::kPointBoxCount));
 
 	data[static_cast<int>(PointBoxType::kPlusOne)].m_point_value = 1;
